@@ -23,3 +23,9 @@ Na VPS, depois de configurar o domínio para esta pasta, não é necessário com
 - **Enter:** iniciar novamente
 - **Espaço / Esc:** pausar
 - **M:** voltar ao menu
+
+## Experimento Nokia 3D
+
+Abra `nokia-3d-test.html` para testar o jogo com o modelo Nokia 3310 hospedado no Sketchfab.
+
+O laboratório inclui textura dinâmica, inspeção de cliques e materiais, seleção manual do material do LCD e controles 2D de reserva. O carregamento depende de conexão com o Sketchfab.
