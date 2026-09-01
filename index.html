@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#84a563">
+  <title>406 Snake</title>
+  <meta name="description" content="Um jogo Snake clássico, rápido e responsivo.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">ARCADE 406</p>
+        <h1>SNAKE</h1>
+      </div>
+      <button id="soundButton" class="icon-button" type="button" aria-label="Ativar som">SOM: OFF</button>
+    </header>
+
+    <section class="scoreboard" aria-label="Placar">
+      <div><span>PONTOS</span><strong id="score">0000</strong></div>
+      <div><span>RECORDE</span><strong id="highScore">0000</strong></div>
+    </section>
+
+    <section class="game-frame">
+      <canvas id="game" width="600" height="450" aria-label="Jogo Snake"></canvas>
+      <div id="overlay" class="overlay">
+        <p id="overlayLabel" class="overlay-label">ESCOLHA O MODO</p>
+        <h2 id="overlayTitle">406 SNAKE</h2>
+        <div id="menu" class="menu">
+          <button type="button" data-mode="classic">CLÁSSICO <small>normal</small></button>
+          <button type="button" data-mode="fast">RÁPIDO <small>2× velocidade</small></button>
+          <button type="button" data-mode="impossible">IMPOSSÍVEL <small>tabuleiro menor</small></button>
+          <button type="button" data-mode="daily">DIÁRIO <small>mesmo mapa hoje</small></button>
+        </div>
+        <button id="actionButton" class="action-button hidden" type="button">JOGAR NOVAMENTE</button>
+        <p id="hint">Setas ou WASD para mover</p>
+      </div>
+    </section>
+
+    <div class="controls" aria-label="Controles por toque">
+      <button type="button" data-direction="UP" aria-label="Cima">▲</button>
+      <div>
+        <button type="button" data-direction="LEFT" aria-label="Esquerda">◀</button>
+        <button type="button" data-direction="DOWN" aria-label="Baixo">▼</button>
+        <button type="button" data-direction="RIGHT" aria-label="Direita">▶</button>
+      </div>
+    </div>
+
+    <footer>
+      <span>ENTER inicia</span><span>ESPAÇO pausa</span><span>M volta ao menu</span>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
