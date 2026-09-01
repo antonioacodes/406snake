@@ -1,57 +1,41 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#84a563">
-  <title>406 Snake</title>
-  <meta name="description" content="Um jogo Snake clássico, rápido e responsivo.">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nokia 406 Snake</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#e7e9e6;font-family:Arial,sans-serif}.phone{width:300px;height:590px;padding:24px 20px;background:linear-gradient(135deg,#193766,#2e5ca1);border:4px solid #12294e;border-radius:42px 42px 64px 64px;box-shadow:0 24px 50px #0005,inset 0 2px 5px #fff7}.brand{text-align:center;color:#dbe5ef;font:700 14px/1 Arial;letter-spacing:.25em;margin:2px 0 12px}.speaker{width:54px;height:6px;margin:auto;background:#10151b;border-radius:9px}.bezel{margin:14px 0 22px;padding:13px;background:#263646;border:3px solid #17232e;border-radius:20px 20px 7px 7px}.screen{position:relative;width:100%;height:178px;padding:8px;background:#aabd87;border:4px solid #6f7d5d;box-shadow:inset 0 3px 8px #0004;color:#172015;font-family:"Courier New",monospace}.status{height:17px;display:flex;justify-content:space-between;font-size:10px;font-weight:bold;border-bottom:1px dotted #172015}.gamebar{height:19px;display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:bold}.screen canvas{display:block;width:100%;height:122px;background:#aabd87;image-rendering:pixelated}.message{position:absolute;inset:44px 12px 18px;display:grid;place-content:center;text-align:center;background:#aabd87eF;font-size:12px;font-weight:bold;line-height:1.5}.message.hide{display:none}.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:0 9px}.key{height:43px;border:1px solid #929292;border-radius:50%;background:linear-gradient(#e8e8e8,#b9b9b9);box-shadow:0 3px 0 #777;cursor:pointer;color:#111;font-weight:bold}.key small{display:block;font-size:8px;color:#555;font-weight:normal}.key:active,.key.active{transform:translateY(2px);box-shadow:0 1px 0 #777}.nav{height:33px;border-radius:15px;background:linear-gradient(#7c8b9b,#53616e);color:white;border-color:#3c4650;box-shadow:0 3px 0 #303942}.nav small{color:#eee}.help{position:fixed;bottom:14px;color:#455;font-size:12px;text-align:center}@media(max-height:650px){body{place-items:start center;padding:8px}.phone{transform:scale(.9);transform-origin:top}.help{display:none}}
+</style>
 </head>
 <body>
-  <main class="game-shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">ARCADE 406</p>
-        <h1>SNAKE</h1>
-      </div>
-      <button id="soundButton" class="icon-button" type="button" aria-label="Ativar som">SOM: OFF</button>
-    </header>
-
-    <section class="scoreboard" aria-label="Placar">
-      <div><span>PONTOS</span><strong id="score">0000</strong></div>
-      <div><span>RECORDE</span><strong id="highScore">0000</strong></div>
-    </section>
-
-    <section class="game-frame">
-      <canvas id="game" width="600" height="450" aria-label="Jogo Snake"></canvas>
-      <div id="overlay" class="overlay">
-        <p id="overlayLabel" class="overlay-label">ESCOLHA O MODO</p>
-        <h2 id="overlayTitle">406 SNAKE</h2>
-        <div id="menu" class="menu">
-          <button type="button" data-mode="classic">CLÁSSICO <small>normal</small></button>
-          <button type="button" data-mode="fast">RÁPIDO <small>2× velocidade</small></button>
-          <button type="button" data-mode="impossible">IMPOSSÍVEL <small>tabuleiro menor</small></button>
-          <button type="button" data-mode="daily">DIÁRIO <small>mesmo mapa hoje</small></button>
-        </div>
-        <button id="actionButton" class="action-button hidden" type="button">JOGAR NOVAMENTE</button>
-        <p id="hint">Setas ou WASD para mover</p>
-      </div>
-    </section>
-
-    <div class="controls" aria-label="Controles por toque">
-      <button type="button" data-direction="UP" aria-label="Cima">▲</button>
-      <div>
-        <button type="button" data-direction="LEFT" aria-label="Esquerda">◀</button>
-        <button type="button" data-direction="DOWN" aria-label="Baixo">▼</button>
-        <button type="button" data-direction="RIGHT" aria-label="Direita">▶</button>
-      </div>
-    </div>
-
-    <footer>
-      <span>ENTER inicia</span><span>ESPAÇO pausa</span><span>M volta ao menu</span>
-    </footer>
-  </main>
-  <script src="script.js"></script>
-</body>
-</html>
+<main class="phone" aria-label="Mockup Nokia 3310 com jogo Snake">
+  <div class="speaker"></div><div class="brand">SISTEMA</div>
+  <section class="bezel"><div class="screen">
+    <div class="status"><span>▮▮▮ 406</span><span>▰</span></div>
+    <div class="gamebar"><span>SNAKE</span><span id="score">000</span></div>
+    <canvas id="game" width="216" height="122" aria-label="Tabuleiro do jogo"></canvas>
+    <div id="message" class="message">406 SNAKE<br><small>5 inicia · 2 4 6 8 movem</small></div>
+  </div></section>
+  <section class="keypad" aria-label="Teclado">
+    <button class="key nav" data-action="menu"><small>MENU</small></button>
+    <button class="key nav" data-action="pause">5<small>INICIAR/PAUSAR</small></button>
+    <button class="key nav" data-action="sound"><small>SOM ON</small></button>
+    <button class="key">1<small>o_o</small></button><button class="key" data-dir="UP">2<small>▲ abc</small></button><button class="key">3<small>def</small></button>
+    <button class="key" data-dir="LEFT">4<small>◀ ghi</small></button><button class="key" data-action="pause">5<small>jkl</small></button><button class="key" data-dir="RIGHT">6<small>▶ mno</small></button>
+    <button class="key">7<small>pqrs</small></button><button class="key" data-dir="DOWN">8<small>▼ tuv</small></button><button class="key">9<small>wxyz</small></button>
+    <button class="key">*<small>+</small></button><button class="key">0<small>_</small></button><button class="key">#<small>⇧</small></button>
+  </section>
+</main><p class="help">Teclado: setas/WASD ou 2, 4, 6 e 8 · Espaço/5 pausa</p>
+<script>
+(()=>{const c=document.querySelector('#game'),x=c.getContext('2d'),msg=document.querySelector('#message'),scoreEl=document.querySelector('#score');const cols=18,rows=10,cw=12;let snake,food,dir,next,state='menu',score=0,timer,sound=true,audio;const vec={UP:[0,-1],DOWN:[0,1],LEFT:[-1,0],RIGHT:[1,0]},opp={UP:'DOWN',DOWN:'UP',LEFT:'RIGHT',RIGHT:'LEFT'};
+function reset(){snake=[{x:8,y:5},{x:7,y:5},{x:6,y:5}];dir=next='RIGHT';score=0;scoreEl.textContent='000';food=spawn();state='playing';msg.classList.add('hide');clearInterval(timer);timer=setInterval(tick,150);draw()}
+function spawn(){let p;do p={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)};while(snake&&snake.some(s=>s.x===p.x&&s.y===p.y));return p}
+function move(d){if(state==='playing'&&d!==opp[next])next=d}
+function tick(){if(state!=='playing')return;dir=next;const v=vec[dir],h={x:snake[0].x+v[0],y:snake[0].y+v[1]};if(h.x<0||h.x>=cols||h.y<0||h.y>=rows||snake.some(s=>s.x===h.x&&s.y===h.y)){state='over';clearInterval(timer);tone(110);msg.innerHTML='FIM DE JOGO<br><small>5 tenta novamente</small>';msg.classList.remove('hide');return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){score+=10;scoreEl.textContent=String(score).padStart(3,'0');food=spawn();tone(800)}else snake.pop();draw()}
+function draw(){x.fillStyle='#aabd87';x.fillRect(0,0,c.width,c.height);x.strokeStyle='#172015';x.strokeRect(.5,.5,c.width-1,c.height-2);x.fillStyle='#172015';snake?.forEach((s,i)=>x.fillRect(s.x*cw+2,s.y*cw+2,cw-(i?4:3),cw-(i?4:3)));if(food)x.fillRect(food.x*cw+4,food.y*cw+4,5,5)}
+function pause(){if(state==='menu'||state==='over')return reset();state=state==='paused'?'playing':'paused';msg.innerHTML=state==='paused'?'PAUSADO<br><small>5 continua</small>':'';msg.classList.toggle('hide',state!=='paused')}
+function tone(f){if(!sound)return;audio??=new AudioContext;const o=audio.createOscillator(),g=audio.createGain();o.type='square';o.frequency.value=f;g.gain.value=.04;o.connect(g).connect(audio.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.08);o.stop(audio.currentTime+.08)}
+document.addEventListener('keydown',e=>{const keys={ArrowUp:'UP',w:'UP',W:'UP','2':'UP',ArrowLeft:'LEFT',a:'LEFT',A:'LEFT','4':'LEFT',ArrowRight:'RIGHT',d:'RIGHT',D:'RIGHT','6':'RIGHT',ArrowDown:'DOWN',s:'DOWN',S:'DOWN','8':'DOWN'};if(keys[e.key]){e.preventDefault();move(keys[e.key])}else if(e.key===' '||e.key==='5'){e.preventDefault();pause()}});
+document.querySelector('.keypad').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.dir)move(b.dataset.dir);if(b.dataset.action==='pause')pause();if(b.dataset.action==='menu'){clearInterval(timer);state='menu';msg.innerHTML='406 SNAKE<br><small>5 inicia · 2 4 6 8 movem</small>';msg.classList.remove('hide')}if(b.dataset.action==='sound'){sound=!sound;b.querySelector('small').textContent='SOM '+(sound?'ON':'OFF');tone(500)}});draw()})();
+</script>
+</body></html>
