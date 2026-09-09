@@ -621,7 +621,7 @@
           <iframe 
             width="100%" 
             height="100%" 
-            src="https://maps.google.com/maps?q=2880%20Broadway,%20Amol&t=&z=13&ie=UTF8&iwloc=&output=embed">
+            src="https://maps.google.com/maps?q=Montana%2C%20USA&t=&z=7&ie=UTF8&iwloc=&output=embed">
           </iframe>
         </div>
       </div>
@@ -636,7 +636,7 @@
           <input
             class="calculator__top--output display"
             type="text"
-            value="0"
+            value="406"
           />
         </div>
         <div class="input">
@@ -700,5 +700,18 @@
     <script src="./javascript/script.js"></script>
     <script src="./javascript/app.js"></script><script>(()=>{const lock=document.querySelector('#montana-lock'),form=lock.querySelector('form'),input=lock.querySelector('input'),error=lock.querySelector('.error');form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim().toLowerCase()==='montana'){lock.remove()}else{error.textContent='senha incorreta';input.select()}})})();</script>
     
-  </body>
+  <style>
+/* 406OS: substitua background/montana-wallpaper.jpg pela arte final quando ela estiver pronta. */
+body.montana-wallpaper{background-image:linear-gradient(120deg,#080606bb,#18080899),url('./background/montana-wallpaper.jpg');background-size:cover;background-position:center}
+.dock .icon.safari-406{display:inline-flex}.safari-406-window{position:absolute;z-index:9999;display:none;left:7vw;top:8vh;width:86vw;height:78vh;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 25px 80px #0008}.safari-406-window.open{display:block}.safari-406-bar{height:42px;display:flex;align-items:center;gap:12px;padding:0 14px;background:#ededed;color:#262626;font:600 13px -apple-system,BlinkMacSystemFont,sans-serif}.safari-406-close{width:13px;height:13px;border:0;border-radius:50%;background:#ff5f57;cursor:pointer}.safari-406-window iframe{width:100%;height:calc(100% - 42px);border:0}.terminal-boot{margin:0;padding:10px 0;color:#e9e9e9;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}.terminal-boot .error406{color:#ff6b6b;font-weight:800}
+</style><script>
+(()=>{const body=document.body;body.classList.add('montana-wallpaper');
+const notes=document.querySelector('.content__typing');if(notes)notes.value='1 - i***o m******\n2 - s*****\n3 - m*****\n4 - d********* d** i*****\n5 - p*o***n*';
+const calculator=document.querySelector('.display');if(calculator)calculator.value='406';
+const dock=document.querySelector('.dock');const allowed=['.open-terminal','.open-note','.open-map','.open-cal'];dock.querySelectorAll(':scope > .icon').forEach(icon=>icon.style.display='none');allowed.forEach(selector=>{const icon=dock.querySelector(selector);if(icon)icon.style.display='inline-flex'});
+const safari=document.createElement('button');safari.type='button';safari.className='icon safari-406';safari.setAttribute('aria-label','Abrir Safari — Guia de Montana');safari.innerHTML='<img src="./icon/Launchpad/safari.png" alt="Safari">';dock.append(safari);
+const safariWindow=document.createElement('section');safariWindow.className='safari-406-window';safariWindow.innerHTML='<div class="safari-406-bar"><button class="safari-406-close" aria-label="Fechar Safari"></button><span>Guia turístico — Montana</span></div><iframe title="Guia turístico de Montana" src="https://www.visitmt.com/"></iframe>';document.body.append(safariWindow);safari.addEventListener('click',()=>safariWindow.classList.add('open'));safariWindow.querySelector('button').addEventListener('click',()=>safariWindow.classList.remove('open'));
+const terminal=document.querySelector('.terminal'),terminalOpen=document.querySelector('.open-terminal');let booted=false;terminalOpen?.addEventListener('click',()=>{if(booted)return;booted=true;const content=terminal.querySelector('.terminal_content');const lines=['Last login: 406@montana','% sudo mount /dev/ouroboros','loading 406system modules...','track_01 intro_montana — locked','track_02 sistema — locked','decrypting archive ██████████','checking signal...','ERROR 406'];content.innerHTML='<pre class="terminal-boot"></pre>';const output=content.querySelector('pre');let index=0;const type=()=>{if(index>=lines.length)return;const line=lines[index++];output.innerHTML+=line==='ERROR 406'?'<span class="error406">ERROR 406</span>\\n':line+'\\n';setTimeout(type,230)};type()})
+})();
+</script></body>
 </html>
