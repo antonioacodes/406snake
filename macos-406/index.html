@@ -713,5 +713,45 @@ const safari=document.createElement('button');safari.type='button';safari.classN
 const safariWindow=document.createElement('section');safariWindow.className='safari-406-window';safariWindow.innerHTML='<div class="safari-406-bar"><button class="safari-406-close" aria-label="Fechar Safari"></button><span>Guia turístico — Montana</span></div><iframe title="Guia turístico de Montana" src="https://www.visitmt.com/"></iframe>';document.body.append(safariWindow);safari.addEventListener('click',()=>safariWindow.classList.add('open'));safariWindow.querySelector('button').addEventListener('click',()=>safariWindow.classList.remove('open'));
 const terminal=document.querySelector('.terminal'),terminalOpen=document.querySelector('.open-terminal');let booted=false;terminalOpen?.addEventListener('click',()=>{if(booted)return;booted=true;const content=terminal.querySelector('.terminal_content');const lines=['Last login: 406@montana','% sudo mount /dev/ouroboros','loading 406system modules...','track_01 intro_montana — locked','track_02 sistema — locked','decrypting archive ██████████','checking signal...','ERROR 406'];content.innerHTML='<pre class="terminal-boot"></pre>';const output=content.querySelector('pre');let index=0;const type=()=>{if(index>=lines.length)return;const line=lines[index++];output.innerHTML+=line==='ERROR 406'?'<span class="error406">ERROR 406</span>\\n':line+'\\n';setTimeout(type,230)};type()})
 })();
+</script><style>
+/* Extensões do desktop 406OS */
+.rec-folder{position:fixed;z-index:50;top:48px;right:28px;width:88px;padding:6px;background:none;border:0;color:#fff;text-align:center;font:12px -apple-system,BlinkMacSystemFont,sans-serif;text-shadow:0 2px 4px #000;cursor:pointer}.rec-folder:before{content:'📁';display:block;font-size:54px;line-height:1}
+.rec-window,.photos-window,.map-406-window,.safari-city{position:fixed;z-index:10000;display:none;background:#f5f5f7;color:#202124;border-radius:13px;overflow:hidden;box-shadow:0 25px 80px #0009;font:14px -apple-system,BlinkMacSystemFont,sans-serif}.rec-window.open,.photos-window.open,.map-406-window.open,.safari-city.open{display:block}.rec-window{left:13vw;top:12vh;width:min(650px,74vw);height:min(510px,72vh)}.photos-window{left:10vw;top:9vh;width:min(800px,80vw);height:min(620px,80vh)}.map-406-window{left:9vw;top:9vh;width:82vw;height:80vh}.safari-city{width:43vw;height:70vh;top:13vh}.safari-city.montana{left:5vw}.safari-city.bh{right:5vw}.rec-bar,.app-bar{height:43px;display:flex;align-items:center;gap:11px;padding:0 14px;background:#e8e8eb;font-weight:600}.app-close{width:13px;height:13px;border:0;border-radius:50%;background:#ff5f57;cursor:pointer}.rec-files{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:22px;padding:30px}.rec-artist{border:0;background:transparent;color:#1b1b1b;cursor:pointer;font:600 13px -apple-system,BlinkMacSystemFont,sans-serif}.rec-artist:before{content:'🌐';display:block;font-size:42px;margin-bottom:8px}.artist-player{display:none;width:calc(100% - 42px);height:352px;margin:0 21px 20px;border:0}.artist-player.open{display:block}.photos-grid{height:calc(100% - 43px);overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;padding:15px;background:#121212}.photos-grid img{width:100%;height:130px;object-fit:cover;border-radius:7px}.empty-gallery{grid-column:1/-1;color:#ddd;text-align:center;padding:40px}.map-406-window iframe,.safari-city iframe{border:0;width:100%;height:calc(100% - 43px)}@media(max-width:700px){.rec-folder{top:34px;right:6px;transform:scale(.8);transform-origin:top right}.rec-window,.photos-window,.map-406-window{left:3vw;top:6vh;width:94vw;height:86vh}.safari-city{width:94vw;height:41vh;left:3vw!important;right:auto}.safari-city.montana{top:5vh}.safari-city.bh{top:52vh}.artist-player{height:250px}.rec-files{gap:12px;padding:18px}}
+</style>
+<script>
+(()=>{
+  const noteText='1 - i***o m******\n2 - m*****\n3 - s*****\n4 - d********* d** i*****\n5 - p*o***n*';
+  const fillNotes=()=>{const notes=document.querySelector('.content__typing');if(notes){notes.value=noteText;notes.textContent=noteText;notes.dispatchEvent(new Event('input',{bubbles:true}));}};
+  fillNotes();
+  document.querySelector('.open-note')?.addEventListener('click',()=>{fillNotes();setTimeout(fillNotes,80);setTimeout(fillNotes,350)},true);
+
+  const closeMarkup='<button class="app-close" aria-label="Fechar"></button>';
+  const makeWindow=(className,title,body)=>{let box=document.querySelector('.'+className);if(!box){box=document.createElement('section');box.className=className;box.innerHTML='<div class="app-bar">'+closeMarkup+'<span>'+title+'</span></div>'+body;document.body.append(box);box.querySelector('.app-close').addEventListener('click',()=>box.classList.remove('open'));}return box;};
+
+  const maps=document.querySelector('.open-map');
+  maps?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const map=makeWindow('map-406-window','Maps — Montana, USA','<iframe title="Montana, USA" src="https://maps.google.com/maps?q=Montana%2C%20USA&t=&z=7&ie=UTF8&iwloc=&output=embed"></iframe>');map.classList.add('open');},true);
+
+  const safari=document.querySelector('.safari-406');
+  safari?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montana=makeWindow('safari-city montana','Safari — Montana','<iframe title="Guia de Montana" src="https://www.visitmt.com/"></iframe>');const bh=makeWindow('safari-city bh','Safari — Belo Horizonte','<iframe title="Belo Horizonte" src="https://prefeitura.pbh.gov.br/"></iframe>');montana.classList.add('open');bh.classList.add('open');},true);
+
+  const folder=document.createElement('button');folder.type='button';folder.className='rec-folder';folder.textContent='406rec';folder.setAttribute('aria-label','Abrir pasta 406rec');document.body.append(folder);
+  const artists=[
+    ['Zete','https://open.spotify.com/embed/artist/0p4w6VgNWQYclcKinvjIxj?utm_source=generator&si=572b931554ce4861'],
+    ['Matteux','https://open.spotify.com/embed/artist/0mF30WPowrz5XTpSIH8IPg?utm_source=generator&si=02375d3083d141cb'],
+    ['Light','https://open.spotify.com/embed/artist/79wdMRWK6p5hSYNrXgOmRD?utm_source=generator&si=1a9a71bc0c4844dc'],
+    ['Rich Tay','https://open.spotify.com/embed/artist/1iR2FUItFlC75FAMPARyHH?utm_source=generator&si=78b60bf2f12747da'],
+    ['tzn','https://open.spotify.com/embed/artist/1Dfv6k5H24sn0kiCONR7EW?utm_source=generator&si=8c529de777384d7f']
+  ];
+  const rec=makeWindow('rec-window','406rec','<div class="rec-files"></div><iframe class="artist-player" title="Artista 406rec" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>');
+  const files=rec.querySelector('.rec-files'),player=rec.querySelector('.artist-player');
+  artists.forEach(([name,url])=>{const item=document.createElement('button');item.className='rec-artist';item.textContent=name;item.addEventListener('click',()=>{player.src=url;player.classList.add('open')});files.append(item);});
+  folder.addEventListener('click',()=>rec.classList.add('open'));
+
+  const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Fotos');photosIcon.innerHTML='<img src="./icon/dock/photos.png" alt="Fotos">';document.querySelector('.dock')?.append(photosIcon);
+  const photos=makeWindow('photos-window','Fotos','<div class="photos-grid"><p class="empty-gallery">Nenhuma imagem encontrada.</p></div>');
+  const grid=photos.querySelector('.photos-grid');
+  const loadPhotos=()=>fetch('./photos.php',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(list=>{grid.innerHTML=list.length?list.map(src=>'<img src="'+src+'" alt="Foto 406">').join(''):'<p class="empty-gallery">Adicione imagens em macos-406/photos/ para vê-las aqui.</p>'}).catch(()=>{grid.innerHTML='<p class="empty-gallery">Adicione imagens em macos-406/photos/ para vê-las aqui.</p>'});
+  photosIcon.addEventListener('click',()=>{photos.classList.add('open');loadPhotos();});
+})();
 </script></body>
 </html>
