@@ -781,7 +781,7 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
  .navbar>ul>li:not(.logo):not(.clock){display:none!important}
  .widgets-panel,.context-menu{display:none!important}
  .dock{position:fixed!important;z-index:12000!important;left:50%!important;right:auto!important;bottom:max(5px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;width:calc(100vw - 12px)!important;max-width:none!important;height:56px!important;padding:5px 7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important;overflow:hidden!important}
- .dock>.icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:44px!important;height:44px!important;min-width:0!important;margin:0!important;padding:2px!important;flex:0 1 44px!important}
+ .dock>.icon{align-items:center!important;justify-content:center!important;width:44px!important;height:44px!important;min-width:0!important;margin:0!important;padding:2px!important;flex:0 1 44px!important}
  .dock>.icon>img{display:block!important;visibility:visible!important;opacity:1!important;max-width:38px!important;max-height:38px!important}
  .rec-folder{top:36px!important;right:8px!important;width:70px!important;transform:scale(.76)!important;transform-origin:top right!important}
  .rec-window,.photos-window,.notes-406-stable,.terminal-406-stable{left:2vw!important;right:auto!important;top:4dvh!important;width:96vw!important;height:calc(100dvh - 72px)!important;border-radius:9px!important}
@@ -839,5 +839,21 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
 .spotify-artist-window.open{display:block}
 .spotify-artist-window iframe{display:block;width:100%;height:calc(100% - 43px);border:0;background:#121212}
 @media(max-width:700px){.safari-city.montana{left:2vw!important;top:3dvh!important;width:96vw!important;height:91dvh!important}.spotify-artist-window{width:94vw;height:82dvh}.spotify-artist-window iframe{height:calc(100% - 36px)}}
+</style><style>
+.dock>.icon:not(.open-terminal):not(.open-note):not(.open-map):not(.open-cal):not(.safari-406):not(.photos-406){display:none!important}
+@media(max-width:1024px),(hover:none) and (pointer:coarse){
+.dock{top:auto!important;bottom:max(4px,env(safe-area-inset-bottom))!important;width:max-content!important;max-width:calc(100% - 16px)!important;height:52px!important;gap:6px!important;padding:4px 8px!important;transform:translateX(-50%)!important}
+.dock>.icon{flex:0 0 38px!important;width:38px!important;height:40px!important;transform:none!important}
+.dock>.icon img{width:32px!important;height:32px!important;object-fit:contain!important;transform:none!important}
+.navbar{font-size:11px!important;height:28px!important}
+#date,#clock{font-size:11px!important;white-space:nowrap!important}
+.rec-window,.photos-window,.notes-406-stable,.terminal-406-stable,.map-406-window,.safari-city.montana,.spotify-artist-window,.presave-406-window,.safari-406-window{
+position:fixed!important;left:8px!important;right:8px!important;top:32px!important;bottom:64px!important;width:auto!important;height:auto!important;max-height:none!important;transform:none!important;min-width:0!important;margin:0!important}
+.map-406-window.bh-map{left:12px!important;right:12px!important;top:36px!important;bottom:68px!important}
+.app-bar,.rec-bar,.safari-406-bar,.presave-406-bar{height:36px!important;min-height:36px!important;font-size:12px!important}
+.app-close,.safari-406-close,.presave-406-close{width:24px!important;height:24px!important;flex:0 0 24px!important}
+.rec-window{overflow:auto!important}
+.spotify-artist-window iframe,.map-406-window iframe,.safari-city iframe,.safari-406-window iframe,.presave-406-frame{display:block!important;height:calc(100% - 36px)!important}
+}
 </style></body>
 </html>
