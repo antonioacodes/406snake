@@ -732,7 +732,7 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   maps?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montanaMap=makeWindow('map-406-window montana-map','Maps — Montana, USA','<iframe title="Montana, USA" src="https://maps.google.com/maps?q=Montana%2C%20USA&t=&z=7&ie=UTF8&iwloc=&output=embed"></iframe>');const bhMap=makeWindow('map-406-window bh-map','Maps — Belo Horizonte','<iframe title="Belo Horizonte" src="https://maps.google.com/maps?q=Belo%20Horizonte%2C%20Minas%20Gerais%2C%20Brasil&t=&z=11&ie=UTF8&iwloc=&output=embed"></iframe>');montanaMap.classList.add('open');bhMap.classList.add('open');},true);
 
   const safari=document.querySelector('.safari-406');
-  safari?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montana=makeWindow('safari-city montana','Safari — Montana','<iframe title="Guia de Montana" src="https://www.visitmt.com/"></iframe>');const bh=makeWindow('safari-city bh','Safari — Belo Horizonte','<iframe title="Belo Horizonte" src="https://guia.melhoresdestinos.com.br/belo-horizonte-minas-gerais.html"></iframe>');montana.classList.add('open');bh.classList.add('open');},true);
+  safari?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montana=makeWindow('safari-city montana','Safari — Montana','<iframe title="Guia de Montana" src="https://www.visitmt.com/"></iframe>');montana.classList.add('open');},true);
 
   const folder=document.createElement('button');folder.type='button';folder.className='rec-folder';folder.textContent='406rec';folder.setAttribute('aria-label','Abrir pasta 406rec');document.body.append(folder);
   const artists=[
