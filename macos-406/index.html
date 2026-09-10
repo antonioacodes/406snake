@@ -796,5 +796,16 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
  .app-bar,.rec-bar{height:36px!important;min-height:36px!important}
  .notes-406-body,.terminal-406-body{height:calc(100% - 36px)!important;overflow:auto!important;-webkit-overflow-scrolling:touch}
 }
-</style></body>
+</style><script>
+(()=>{
+ const fixedDate=()=>{
+   const date=document.querySelector('#date'),clock=document.querySelector('#clock');
+   if(date){date.textContent='20 de setembro de 2026';date.classList.remove('hidden');}
+   if(clock)clock.textContent='4:06 AM';
+   const day=document.querySelector('#taghvim h2'),weekday=document.querySelector('#taghvim h4');
+   if(day)day.textContent='20';if(weekday)weekday.textContent='Domingo';
+ };
+ fixedDate();setInterval(fixedDate,500);
+})();
+</script></body>
 </html>
