@@ -709,8 +709,8 @@ body.montana-wallpaper{background-image:linear-gradient(120deg,#080606bb,#180808
 const notes=document.querySelector('.content__typing');if(notes)notes.value='1 - i***o m******\n2 - s*****\n3 - m*****\n4 - d********* d** i*****\n5 - p*o***n*';
 const calculator=document.querySelector('.display');if(calculator)calculator.value='406';
 const dock=document.querySelector('.dock');const allowed=['.open-terminal','.open-note','.open-map','.open-cal'];dock.querySelectorAll(':scope > .icon').forEach(icon=>icon.style.display='none');allowed.forEach(selector=>{const icon=dock.querySelector(selector);if(icon)icon.style.display='inline-flex'});
-const safari=document.createElement('button');safari.type='button';safari.className='icon safari-406';safari.setAttribute('aria-label','Abrir Safari — Pré-save 406 Montana');safari.innerHTML='<img src="./icon/Launchpad/safari.png" alt="Safari">';dock.append(safari);
-const safariWindow=document.createElement('section');safariWindow.className='safari-406-window';safariWindow.innerHTML='<div class="safari-406-bar"><button class="safari-406-close" aria-label="Fechar Safari"></button><span>Pré-save — 406 Montana</span></div><iframe title="Pré-save 406 Montana" src="https://presave.406rec.com/"></iframe>';document.body.append(safariWindow);safari.addEventListener('click',()=>safariWindow.classList.add('open'));safariWindow.querySelector('button').addEventListener('click',()=>safariWindow.classList.remove('open'));window.addEventListener('406:unlocked',()=>{safariWindow.classList.add('open')},{once:true});
+const safari=document.createElement('button');safari.type='button';safari.className='icon safari-406';safari.setAttribute('aria-label','Abrir Safari — Guia de Montana');safari.innerHTML='<img src="./icon/Launchpad/safari.png" alt="Safari">';dock.append(safari);
+const safariWindow=document.createElement('section');safariWindow.className='safari-406-window';safariWindow.innerHTML='<div class="safari-406-bar"><button class="safari-406-close" aria-label="Fechar Safari"></button><span>Guia turístico — Montana</span></div><iframe title="Guia turístico de Montana" src="https://www.visitmt.com/"></iframe>';document.body.append(safariWindow);safari.addEventListener('click',()=>safariWindow.classList.add('open'));safariWindow.querySelector('button').addEventListener('click',()=>safariWindow.classList.remove('open'));
 const terminal=document.querySelector('.terminal'),terminalOpen=document.querySelector('.open-terminal');let booted=false;terminalOpen?.addEventListener('click',()=>{if(booted)return;booted=true;const content=terminal.querySelector('.terminal_content');const lines=['Last login: 406@montana','% sudo mount /dev/ouroboros','loading 406system modules...','track_01 intro_montana — locked','track_02 sistema — locked','decrypting archive ██████████','checking signal...','ERROR 406'];content.innerHTML='<pre class="terminal-boot"></pre>';const output=content.querySelector('pre');let index=0;const type=()=>{if(index>=lines.length)return;const line=lines[index++];output.innerHTML+=line==='ERROR 406'?'<span class="error406">ERROR 406</span>\\n':line+'\\n';setTimeout(type,230)};type()})
 })();
 </script><style>
@@ -732,7 +732,7 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   maps?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montanaMap=makeWindow('map-406-window montana-map','Maps — Montana, USA','<iframe title="Montana, USA" src="https://maps.google.com/maps?q=Montana%2C%20USA&t=&z=7&ie=UTF8&iwloc=&output=embed"></iframe>');const bhMap=makeWindow('map-406-window bh-map','Maps — Belo Horizonte','<iframe title="Belo Horizonte" src="https://maps.google.com/maps?q=Belo%20Horizonte%2C%20Minas%20Gerais%2C%20Brasil&t=&z=11&ie=UTF8&iwloc=&output=embed"></iframe>');montanaMap.classList.add('open');bhMap.classList.add('open');},true);
 
   const safari=document.querySelector('.safari-406');
-  safari?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montana=makeWindow('safari-city montana','Safari — Pré-save 406 Montana','<iframe title="Pré-save 406 Montana" src="https://presave.406rec.com/"></iframe>');montana.classList.add('open');},true);
+  safari?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montana=makeWindow('safari-city montana','Safari — Montana','<iframe title="Guia turístico de Montana" src="https://www.visitmt.com/"></iframe>');montana.classList.add('open');},true);
 
   const folder=document.createElement('button');folder.type='button';folder.className='rec-folder';folder.textContent='406rec';folder.setAttribute('aria-label','Abrir pasta 406rec');document.body.append(folder);
   const artists=[
@@ -806,6 +806,33 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
    if(day)day.textContent='20';if(weekday)weekday.textContent='Domingo';
  };
  fixedDate();setInterval(fixedDate,500);
+})();
+</script><style>
+.presave-406-window{position:fixed;z-index:10020;display:none;left:50%;top:50%;width:min(520px,88vw);max-height:86vh;transform:translate(-50%,-50%);overflow:hidden;border:1px solid #ffffff26;border-radius:14px;background:#090909;color:#fff;box-shadow:0 28px 90px #000c;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.presave-406-window.open{display:block}
+.presave-406-bar{height:43px;display:flex;align-items:center;gap:11px;padding:0 14px;background:#e8e8eb;color:#202124;font-size:13px;font-weight:650}
+.presave-406-close{width:13px;height:13px;flex:none;border:0;border-radius:50%;background:#ff5f57;cursor:pointer}
+.presave-406-content{max-height:calc(86vh - 43px);overflow:auto;padding:22px;text-align:center;background:radial-gradient(circle at 50% 10%,#551018 0,transparent 55%),#090909}
+.presave-406-cover{display:block;width:min(300px,70vw);aspect-ratio:1;object-fit:cover;margin:0 auto 19px;border-radius:10px;box-shadow:0 18px 50px #000b}
+.presave-406-content h2{margin:0;font-size:30px;letter-spacing:-.035em}
+.presave-406-content p{margin:8px 0 19px;color:#bbb;font-size:13px;line-height:1.45}
+.presave-406-action{display:flex;min-height:50px;align-items:center;justify-content:center;gap:9px;border-radius:999px;background:#1ed760;color:#06150b;text-decoration:none;font-size:14px;font-weight:800}
+.presave-406-action svg{width:22px;height:22px}
+@media(max-width:700px){.presave-406-window{width:94vw;max-height:92dvh}.presave-406-content{max-height:calc(92dvh - 43px);padding:15px}.presave-406-cover{width:min(250px,62vw)}}
+</style>
+<script>
+(()=>{
+ const cover='https://distrokid.imgix.net/http%3A%2F%2Fgather.fandalism.com%2F8717558--6B0E24EC-6AAE-47B5-8D40345401D019F9--0--9484384--DDICOVERv5.png?fm=jpg&q=75&w=800&s=97e2ff668665d4a01c3242307d231ae5';
+ const auth='https://distrokid.com/spotify/auth/?action=hyperfollow&artistNameShortcut=406reczetelight&albumIdShortcut=406-montana';
+ const box=document.createElement('section');
+ box.className='presave-406-window';
+ box.setAttribute('aria-label','Pré-save 406 Montana');
+ box.innerHTML='<div class="presave-406-bar"><button class="presave-406-close" type="button" aria-label="Fechar janela"></button><span>Pré-save — 406 Montana</span></div><div class="presave-406-content"><img class="presave-406-cover" src="'+cover+'" alt="Capa do álbum 406 Montana"><h2>406 Montana</h2><p>406rec · Zete · Light · Matteux · Rich Tay · tzn<br>Disponível em 20 de setembro de 2026</p><a class="presave-406-action" href="'+auth+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.7A10.3 10.3 0 1 0 12 22.3 10.3 10.3 0 0 0 12 1.7Zm4.72 14.86a.64.64 0 0 1-.88.21c-2.4-1.47-5.43-1.8-9-1a.64.64 0 1 1-.28-1.25c3.9-.87 7.25-.5 9.95 1.14.3.19.4.58.21.89Zm1.25-2.77a.8.8 0 0 1-1.1.26c-2.75-1.69-6.94-2.18-10.2-1.19a.8.8 0 1 1-.46-1.53c3.72-1.13 8.34-.58 11.5 1.36.38.23.5.72.26 1.1Zm.1-2.89C14.77 8.94 9.34 8.75 6.2 9.7a.96.96 0 1 1-.56-1.84c3.61-1.1 9.62-.87 13.42 1.39a.96.96 0 0 1-.98 1.65Z"/></svg>Fazer pré-save no Spotify</a></div>';
+ document.body.append(box);
+ box.querySelector('.presave-406-close').addEventListener('click',()=>box.classList.remove('open'));
+ const openPresave=()=>box.classList.add('open');
+ window.addEventListener('406:unlocked',openPresave,{once:true});
+ if(!document.querySelector('#montana-lock'))openPresave();
 })();
 </script></body>
 </html>
