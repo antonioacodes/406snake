@@ -739,12 +739,11 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
     ['Zete','https://open.spotify.com/embed/artist/0p4w6VgNWQYclcKinvjIxj?utm_source=generator&si=572b931554ce4861'],
     ['Matteux','https://open.spotify.com/embed/artist/0mF30WPowrz5XTpSIH8IPg?utm_source=generator&si=02375d3083d141cb'],
     ['Light','https://open.spotify.com/embed/artist/79wdMRWK6p5hSYNrXgOmRD?utm_source=generator&si=1a9a71bc0c4844dc'],
-    ['Rich Tay','https://open.spotify.com/embed/artist/1iR2FUItFlC75FAMPARyHH?utm_source=generator&si=78b60bf2f12747da'],
-    ['tzn','https://open.spotify.com/embed/artist/1Dfv6k5H24sn0kiCONR7EW?utm_source=generator&si=8c529de777384d7f']
+    ['Rich Tay','https://open.spotify.com/embed/artist/1iR2FUItFlC75FAMPARyHH?utm_source=generator&si=78b60bf2f12747da']
   ];
-  const rec=makeWindow('rec-window','406rec','<div class="rec-files"></div><iframe class="artist-player" title="Artista 406rec" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>');
-  const files=rec.querySelector('.rec-files'),player=rec.querySelector('.artist-player');
-  artists.forEach(([name,url])=>{const item=document.createElement('button');item.className='rec-artist';item.textContent=name;item.addEventListener('click',()=>{player.src=url;player.classList.add('open')});files.append(item);});
+  const rec=makeWindow('rec-window','406rec','<div class="rec-files"></div>');
+  const files=rec.querySelector('.rec-files');
+  artists.forEach(([name,url])=>{const item=document.createElement('button');item.className='rec-artist';item.textContent=name;item.addEventListener('click',()=>{const slug=name.toLowerCase().replace(/[^a-z0-9]+/g,'-');const playerWindow=makeWindow('spotify-artist-window spotify-'+slug,'Spotify — '+name,'<iframe title="Spotify — '+name+'" src="'+url+'" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>');playerWindow.classList.add('open')});files.append(item);});
   folder.addEventListener('click',()=>rec.classList.add('open'));
 
   const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Fotos');photosIcon.innerHTML='<img src="./icon/dock/photos.png" alt="Fotos">';document.querySelector('.dock')?.append(photosIcon);
@@ -832,5 +831,13 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
  window.addEventListener('406:unlocked',openPresave,{once:true});
  if(!document.querySelector('#montana-lock'))openPresave();
 })();
-</script></body>
+</script><style>
+/* Safari ocupa a área útil completa do 406OS. */
+.safari-city.montana{position:fixed!important;left:3vw!important;right:auto!important;top:5vh!important;width:94vw!important;height:86vh!important}
+.rec-artist:before{content:""!important;display:block!important;width:58px!important;height:42px!important;margin:0 auto 10px!important;border-radius:5px!important;background:linear-gradient(180deg,#70b9ff,#2f7fcf)!important;clip-path:polygon(0 18%,34% 18%,42% 0,66% 0,74% 18%,100% 18%,100% 100%,0 100%)!important;box-shadow:inset 0 1px #ffffff99,0 5px 10px #0003!important}
+.spotify-artist-window{position:fixed;z-index:11030;display:none;left:50%;top:50%;width:min(600px,82vw);height:min(520px,76vh);transform:translate(-50%,-50%);overflow:hidden;border-radius:13px;background:#121212;color:#202124;box-shadow:0 25px 85px #000b;font:14px -apple-system,BlinkMacSystemFont,sans-serif}
+.spotify-artist-window.open{display:block}
+.spotify-artist-window iframe{display:block;width:100%;height:calc(100% - 43px);border:0;background:#121212}
+@media(max-width:700px){.safari-city.montana{left:2vw!important;top:3dvh!important;width:96vw!important;height:91dvh!important}.spotify-artist-window{width:94vw;height:82dvh}.spotify-artist-window iframe{height:calc(100% - 36px)}}
+</style></body>
 </html>
