@@ -729,10 +729,10 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   const makeWindow=(className,title,body)=>{let box=document.querySelector('.'+className.trim().split(' ').join('.'));if(!box){box=document.createElement('section');box.className=className;box.innerHTML='<div class="app-bar">'+closeMarkup+'<span>'+title+'</span></div>'+body;document.body.append(box);box.querySelector('.app-close').addEventListener('click',()=>box.classList.remove('open'));}return box;};
 
   const maps=document.querySelector('.open-map');
-  maps?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const map=makeWindow('map-406-window','Maps — Montana, USA','<iframe title="Montana, USA" src="https://maps.google.com/maps?q=Montana%2C%20USA&t=&z=7&ie=UTF8&iwloc=&output=embed"></iframe>');map.classList.add('open');},true);
+  maps?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montanaMap=makeWindow('map-406-window montana-map','Maps — Montana, USA','<iframe title="Montana, USA" src="https://maps.google.com/maps?q=Montana%2C%20USA&t=&z=7&ie=UTF8&iwloc=&output=embed"></iframe>');const bhMap=makeWindow('map-406-window bh-map','Maps — Belo Horizonte','<iframe title="Belo Horizonte" src="https://maps.google.com/maps?q=Belo%20Horizonte%2C%20Minas%20Gerais%2C%20Brasil&t=&z=11&ie=UTF8&iwloc=&output=embed"></iframe>');montanaMap.classList.add('open');bhMap.classList.add('open');},true);
 
   const safari=document.querySelector('.safari-406');
-  safari?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montana=makeWindow('safari-city montana','Safari — Montana','<iframe title="Guia de Montana" src="https://www.visitmt.com/"></iframe>');const bh=makeWindow('safari-city bh','Safari — Belo Horizonte','<iframe title="Belo Horizonte" src="https://prefeitura.pbh.gov.br/"></iframe>');montana.classList.add('open');bh.classList.add('open');},true);
+  safari?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const montana=makeWindow('safari-city montana','Safari — Montana','<iframe title="Guia de Montana" src="https://www.visitmt.com/"></iframe>');const bh=makeWindow('safari-city bh','Safari — Belo Horizonte','<iframe title="Belo Horizonte" src="https://guia.melhoresdestinos.com.br/belo-horizonte-minas-gerais.html"></iframe>');montana.classList.add('open');bh.classList.add('open');},true);
 
   const folder=document.createElement('button');folder.type='button';folder.className='rec-folder';folder.textContent='406rec';folder.setAttribute('aria-label','Abrir pasta 406rec');document.body.append(folder);
   const artists=[
@@ -773,5 +773,28 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
  const terminalButton=document.querySelector('.open-terminal');
  terminalButton?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const panel=stable('terminal-406-stable','Terminal','terminal-406-body'),output=panel.querySelector('pre');panel.classList.add('open');output.textContent='';const lines=['Last login: 406@montana','% sudo mount /dev/ouroboros','loading 406system modules...','checking artist collective...','decrypting archive ██████████','checking signal...','ERROR 406'];let index=0;const type=()=>{if(index>=lines.length)return;const line=lines[index++];if(line==='ERROR 406')output.innerHTML+='<span class="error">ERROR 406</span>\n';else output.textContent+=line+'\n';setTimeout(type,210)};type();},true);
 })();
-</script></body>
+</script><style>
+/* Interface touch do 406OS: todos os apps cabem sem arrastar o desktop. */
+.map-406-window{width:43vw;height:76vh;top:10vh}.map-406-window.montana-map{left:5vw}.map-406-window.bh-map{left:auto;right:5vw}
+@media (max-width:1024px), (hover:none) and (pointer:coarse){
+ html,body{width:100%!important;height:100dvh!important;min-height:0!important;overflow:hidden!important;overscroll-behavior:none}
+ .navbar{height:30px!important;min-height:30px!important;overflow:hidden!important}
+ .navbar>ul>li:not(.logo):not(.clock){display:none!important}
+ .widgets-panel,.context-menu{display:none!important}
+ .dock{position:fixed!important;z-index:12000!important;left:50%!important;right:auto!important;bottom:max(5px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;width:calc(100vw - 12px)!important;max-width:none!important;height:56px!important;padding:5px 7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important;overflow:hidden!important}
+ .dock>.icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:44px!important;height:44px!important;min-width:0!important;margin:0!important;padding:2px!important;flex:0 1 44px!important}
+ .dock>.icon>img{display:block!important;visibility:visible!important;opacity:1!important;max-width:38px!important;max-height:38px!important}
+ .rec-folder{top:36px!important;right:8px!important;width:70px!important;transform:scale(.76)!important;transform-origin:top right!important}
+ .rec-window,.photos-window,.notes-406-stable,.terminal-406-stable{left:2vw!important;right:auto!important;top:4dvh!important;width:96vw!important;height:calc(100dvh - 72px)!important;border-radius:9px!important}
+ .map-406-window,.safari-city{left:2vw!important;right:auto!important;width:96vw!important;height:42dvh!important;border-radius:9px!important}
+ .map-406-window.montana-map,.safari-city.montana{top:3dvh!important}
+ .map-406-window.bh-map,.safari-city.bh{top:48dvh!important}
+ .rec-files{grid-template-columns:repeat(3,1fr)!important;gap:8px!important;padding:12px!important}
+ .rec-artist{font-size:11px!important}.rec-artist:before{font-size:30px!important}
+ .artist-player{height:calc(100% - 155px)!important;margin:0 10px!important;width:calc(100% - 20px)!important}
+ .photos-grid{grid-template-columns:repeat(3,1fr)!important;padding:8px!important}.photos-grid img{height:90px!important}
+ .app-bar,.rec-bar{height:36px!important;min-height:36px!important}
+ .notes-406-body,.terminal-406-body{height:calc(100% - 36px)!important;overflow:auto!important;-webkit-overflow-scrolling:touch}
+}
+</style></body>
 </html>
