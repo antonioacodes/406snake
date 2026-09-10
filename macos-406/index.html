@@ -726,7 +726,7 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   document.querySelector('.open-note')?.addEventListener('click',()=>{fillNotes();setTimeout(fillNotes,80);setTimeout(fillNotes,350)},true);
 
   const closeMarkup='<button class="app-close" aria-label="Fechar"></button>';
-  const makeWindow=(className,title,body)=>{let box=document.querySelector('.'+className);if(!box){box=document.createElement('section');box.className=className;box.innerHTML='<div class="app-bar">'+closeMarkup+'<span>'+title+'</span></div>'+body;document.body.append(box);box.querySelector('.app-close').addEventListener('click',()=>box.classList.remove('open'));}return box;};
+  const makeWindow=(className,title,body)=>{let box=document.querySelector('.'+className.trim().split(' ').join('.'));if(!box){box=document.createElement('section');box.className=className;box.innerHTML='<div class="app-bar">'+closeMarkup+'<span>'+title+'</span></div>'+body;document.body.append(box);box.querySelector('.app-close').addEventListener('click',()=>box.classList.remove('open'));}return box;};
 
   const maps=document.querySelector('.open-map');
   maps?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const map=makeWindow('map-406-window','Maps — Montana, USA','<iframe title="Montana, USA" src="https://maps.google.com/maps?q=Montana%2C%20USA&t=&z=7&ie=UTF8&iwloc=&output=embed"></iframe>');map.classList.add('open');},true);
