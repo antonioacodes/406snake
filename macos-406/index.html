@@ -753,5 +753,25 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   const loadPhotos=()=>fetch('./photos.php',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(list=>{grid.innerHTML=list.length?list.map(src=>'<img src="'+src+'" alt="Foto 406">').join(''):'<p class="empty-gallery">Adicione imagens em macos-406/photos/ para vê-las aqui.</p>'}).catch(()=>{grid.innerHTML='<p class="empty-gallery">Adicione imagens em macos-406/photos/ para vê-las aqui.</p>'});
   photosIcon.addEventListener('click',()=>{photos.classList.add('open');loadPhotos();});
 })();
+</script><style>
+/* Correção definitiva dos apps essenciais do dock */
+.dock .open-map,.dock .open-terminal,.dock .open-note,.dock .open-cal,.dock .photos-406,.dock .safari-406{display:inline-flex!important}
+.dock .open-map>img,.dock .open-terminal>img,.dock .open-note>img,.dock .open-cal>img,.dock .photos-406>img,.dock .safari-406>img{display:block!important;visibility:visible!important;opacity:1!important}
+.notes-406-stable,.terminal-406-stable{position:fixed;z-index:11000;display:none;left:12vw;top:10vh;width:min(760px,76vw);height:min(570px,78vh);border-radius:13px;overflow:hidden;box-shadow:0 25px 90px #000a;font-family:-apple-system,BlinkMacSystemFont,sans-serif}.notes-406-stable.open,.terminal-406-stable.open{display:block}.notes-406-stable{background:#fff8b8;color:#242118}.terminal-406-stable{background:#101010;color:#e7e7e7}.notes-406-body{margin:0;padding:28px;font:20px/1.9 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}.terminal-406-body{height:calc(100% - 43px);overflow:auto;margin:0;padding:22px;font:14px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}.terminal-406-body .error{color:#ff625e;font-weight:800}.notes-406-stable .app-bar,.terminal-406-stable .app-bar{color:#222}@media(max-width:700px){.notes-406-stable,.terminal-406-stable{left:3vw;top:6vh;width:94vw;height:86vh}.notes-406-body{padding:18px;font-size:15px}.terminal-406-body{padding:15px;font-size:12px}}
+</style>
+<script>
+(()=>{
+ const dock=document.querySelector('.dock');
+ ['.open-map','.open-terminal','.open-note','.open-cal'].forEach(selector=>{const icon=dock?.querySelector(selector);if(icon){icon.style.setProperty('display','inline-flex','important');icon.querySelector('img')?.classList.remove('hidden');}});
+ const stable=(className,title,bodyClass)=>{
+   let panel=document.querySelector('.'+className);
+   if(!panel){panel=document.createElement('section');panel.className=className;panel.innerHTML='<div class="app-bar"><button class="app-close" aria-label="Fechar"></button><span>'+title+'</span></div><pre class="'+bodyClass+'"></pre>';document.body.append(panel);panel.querySelector('.app-close').addEventListener('click',()=>panel.classList.remove('open'));}
+   return panel;
+ };
+ const notesButton=document.querySelector('.open-note');
+ notesButton?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const panel=stable('notes-406-stable','Notes','notes-406-body');panel.querySelector('pre').textContent='1 - i***o m******\n2 - m*****\n3 - s*****\n4 - d********* d** i*****\n5 - p*o***n*';panel.classList.add('open');},true);
+ const terminalButton=document.querySelector('.open-terminal');
+ terminalButton?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();const panel=stable('terminal-406-stable','Terminal','terminal-406-body'),output=panel.querySelector('pre');panel.classList.add('open');output.textContent='';const lines=['Last login: 406@montana','% sudo mount /dev/ouroboros','loading 406system modules...','checking artist collective...','decrypting archive ██████████','checking signal...','ERROR 406'];let index=0;const type=()=>{if(index>=lines.length)return;const line=lines[index++];if(line==='ERROR 406')output.innerHTML+='<span class="error">ERROR 406</span>\n';else output.textContent+=line+'\n';setTimeout(type,210)};type();},true);
+})();
 </script></body>
 </html>
