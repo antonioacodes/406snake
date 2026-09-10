@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="Faça o pré-save do mais novo lançamento da 406rec: 406 Montana.">
+  <meta property="og:title" content="406 Montana — Faça o pré-save">
+  <meta property="og:description" content="Faça o pré-save do mais novo lançamento da 406rec.">
+  <meta property="og:type" content="music.album">
+  <meta property="og:site_name" content="406rec">
+  <meta property="og:url" content="https://presave.406rec.com/">
+  <meta property="og:image" content="https://distrokid.imgix.net/http%3A%2F%2Fgather.fandalism.com%2F8717558--6B0E24EC-6AAE-47B5-8D40345401D019F9--0--9484384--DDICOVERv5.png?fm=jpg&q=75&w=800&s=97e2ff668665d4a01c3242307d231ae5">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="Capa do álbum 406 Montana">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="406 Montana — Faça o pré-save">
+  <meta name="twitter:description" content="Faça o pré-save do mais novo lançamento da 406rec.">
+  <meta name="twitter:image" content="https://distrokid.imgix.net/http%3A%2F%2Fgather.fandalism.com%2F8717558--6B0E24EC-6AAE-47B5-8D40345401D019F9--0--9484384--DDICOVERv5.png?fm=jpg&q=75&w=800&s=97e2ff668665d4a01c3242307d231ae5">
+  <title>406 Montana — Pré-save</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --red: #a90d17;
+      --red-bright: #e51b2a;
+      --paper: #f4efe7;
+      --muted: #aaa3a3;
+      --panel: rgba(12, 12, 12, .82);
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      overflow-x: hidden;
+      background: #080808;
+      color: var(--paper);
+      font-family: "Spotify Mix", "Circular Std", "DM Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .backdrop {
+      position: fixed;
+      inset: -32px;
+      z-index: -3;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.9)),
+        url("https://distrokid.imgix.net/http%3A%2F%2Fgather.fandalism.com%2F8717558--6B0E24EC-6AAE-47B5-8D40345401D019F9--0--9484384--DDICOVERv5.png?fm=jpg&q=75&w=800&s=97e2ff668665d4a01c3242307d231ae5") center / cover;
+      filter: blur(26px) saturate(.7);
+      transform: scale(1.08);
+    }
+    .backdrop::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 15%, rgba(174, 13, 25, .18), transparent 44%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0 1px, transparent 1px 4px);
+    }
+    main {
+      width: min(100%, 540px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: max(18px, env(safe-area-inset-top)) 18px max(22px, env(safe-area-inset-bottom));
+      display: grid;
+      align-content: center;
+    }
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(22,22,22,.9), rgba(6,6,6,.94));
+      box-shadow: 0 28px 80px rgba(0,0,0,.62);
+      backdrop-filter: blur(18px);
+    }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3px 4px 13px;
+      color: #d9d4cf;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .mark { display: inline-flex; align-items: center; gap: 8px; }
+    .mark::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red-bright);
+      box-shadow: 0 0 16px var(--red-bright);
+    }
+    .release { color: #817c79; }
+    .cover {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      object-fit: cover;
+      border-radius: 20px;
+      background: #111;
+      box-shadow: 0 18px 52px rgba(0,0,0,.55);
+    }
+    .content { padding: 22px 8px 8px; text-align: center; }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--red-bright);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-family: "Spotify Mix", "Circular Std", "DM Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 900;
+      font-size: clamp(38px, 12vw, 58px);
+      line-height: .92;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+    .artists {
+      margin: 12px 0 0;
+      color: #cbc5c1;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: .025em;
+    }
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin: 21px 0 18px;
+    }
+    .unit {
+      padding: 11px 3px 9px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      background: rgba(255,255,255,.035);
+    }
+    .unit strong {
+      display: block;
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(18px, 6vw, 25px);
+      line-height: 1;
+    }
+    .unit span {
+      display: block;
+      margin-top: 5px;
+      color: #77716e;
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .spotify {
+      min-height: 58px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      border: 0;
+      border-radius: 15px;
+      padding: 16px 20px;
+      color: #06150b;
+      background: #1ed760;
+      box-shadow: 0 10px 30px rgba(30,215,96,.2);
+      font: inherit;
+      font-size: 16px;
+      font-weight: 900;
+      text-decoration: none;
+      touch-action: manipulation;
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .spotify:active { transform: scale(.985); }
+    .spotify:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    .spotify svg { width: 25px; height: 25px; flex: none; }
+    .fineprint {
+      margin: 13px auto 1px;
+      max-width: 360px;
+      color: #77716e;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+    .fineprint a { color: #a7a19e; }
+    footer {
+      padding-top: 15px;
+      color: #605b58;
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: .14em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    @media (hover:hover) {
+      .spotify:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    }
+    @media (max-width: 430px) {
+      main { padding-left: 12px; padding-right: 12px; align-content: start; }
+      .card { border-radius: 23px; padding: 10px; }
+      .cover { border-radius: 16px; }
+      .content { padding-top: 18px; }
+    }
+    @media (max-height: 760px) and (orientation: landscape) {
+      main { width: min(100%, 920px); padding: 12px; }
+      .card { display: grid; grid-template-columns: minmax(240px, .9fr) minmax(300px, 1.1fr); gap: 10px; }
+      .topline { position: absolute; z-index: 2; left: 18px; right: 18px; color: white; text-shadow: 0 1px 6px #000; }
+      .cover { align-self: center; }
+      .content { align-self: center; padding: 22px; }
+      footer { grid-column: 1 / -1; padding-top: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+  <main>
+    <article class="card">
+      <div class="topline">
+        <span class="mark">Four O Six</span>
+        <span class="release">20.09.2026</span>
+      </div>
+      <img class="cover"
+        src="https://distrokid.imgix.net/http%3A%2F%2Fgather.fandalism.com%2F8717558--6B0E24EC-6AAE-47B5-8D40345401D019F9--0--9484384--DDICOVERv5.png?fm=jpg&q=75&w=800&s=97e2ff668665d4a01c3242307d231ae5"
+        alt="Capa do lançamento 406 Montana"
+        width="1000" height="1000">
+      <section class="content">
+        <p class="eyebrow">Lançamento</p>
+        <h1>406 Montana</h1>
+        <p class="artists">406rec · Zete · Light · Matteux · Rich Tay · tzn</p>
+        <div class="countdown" aria-label="Contagem regressiva para o lançamento">
+          <div class="unit"><strong id="days">00</strong><span>Dias</span></div>
+          <div class="unit"><strong id="hours">00</strong><span>Horas</span></div>
+          <div class="unit"><strong id="minutes">00</strong><span>Min</span></div>
+          <div class="unit"><strong id="seconds">00</strong><span>Seg</span></div>
+        </div>
+        <a class="spotify"
+          href="https://distrokid.com/spotify/auth/?action=hyperfollow&amp;artistNameShortcut=406reczetelight&amp;albumIdShortcut=406-montana"
+          target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.7A10.3 10.3 0 1 0 12 22.3 10.3 10.3 0 0 0 12 1.7Zm4.72 14.86a.64.64 0 0 1-.88.21c-2.4-1.47-5.43-1.8-9-1a.64.64 0 1 1-.28-1.25c3.9-.87 7.25-.5 9.95 1.14.3.19.4.58.21.89Zm1.25-2.77a.8.8 0 0 1-1.1.26c-2.75-1.69-6.94-2.18-10.2-1.19a.8.8 0 1 1-.46-1.53c3.72-1.13 8.34-.58 11.5 1.36.38.23.5.72.26 1.1Zm.1-2.89C14.77 8.94 9.34 8.75 6.2 9.7a.96.96 0 1 1-.56-1.84c3.61-1.1 9.62-.87 13.42 1.39a.96.96 0 0 1-.98 1.65Z"/></svg>
+          Fazer pré-save no Spotify
+        </a>
+        <p class="fineprint">Ao continuar, a autorização e o pré-save são processados com segurança pelo Spotify.</p>
+      </section>
+      <footer>406 REC · Belo Horizonte / Montana</footer>
+    </article>
+  </main>
+  <script>
+    (() => {
+      const release = new Date("2026-09-20T04:06:00-03:00").getTime();
+      const fields = {
+        days: document.querySelector("#days"),
+        hours: document.querySelector("#hours"),
+        minutes: document.querySelector("#minutes"),
+        seconds: document.querySelector("#seconds")
+      };
+      const pad = value => String(Math.max(0, value)).padStart(2, "0");
+      function updateCountdown() {
+        const distance = Math.max(0, release - Date.now());
+        fields.days.textContent = pad(Math.floor(distance / 86400000));
+        fields.hours.textContent = pad(Math.floor(distance / 3600000) % 24);
+        fields.minutes.textContent = pad(Math.floor(distance / 60000) % 60);
+        fields.seconds.textContent = pad(Math.floor(distance / 1000) % 60);
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+  </script>
+</body>
+</html>
