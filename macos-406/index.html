@@ -747,7 +747,7 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   folder.addEventListener('click',()=>rec.classList.add('open'));
 
   const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Snakegram');photosIcon.innerHTML='<img src="./icon/dock/snakegram.png?v=20260914f" alt="Snakegram" onerror="this.src=\'./icon/dock/photos.png\'">';document.querySelector('.dock')?.append(photosIcon);
-  const photos=makeWindow('photos-window feed-406-window','Snakegram','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><p class="feed-notice"></p><button type="button" class="feed-add" aria-label="Publicar no Snakegram">+</button><form class="feed-upload" hidden><strong>Publicar no Snakegram</strong><label>SEU @<input name="handle" maxlength="31" placeholder="@seuuser" required></label><label>FOTO OU VÍDEO<input name="media" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" required></label><div><button type="submit">ENVIAR PARA ANÁLISE</button><button type="button" class="feed-upload-cancel">CANCELAR</button></div><small>Seu post só aparece após aprovação.</small></form></div>');
+  const photos=makeWindow('photos-window feed-406-window','Snakegram','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><p class="feed-notice"></p><button type="button" class="feed-add" aria-label="Publicar no Snakegram">PUBLICAR</button><form class="feed-upload" hidden><strong>Publicar no Snakegram</strong><label>SEU @<input name="handle" maxlength="31" placeholder="@seuuser" required></label><label>FOTO OU VÍDEO<input name="media" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" required></label><div><button type="submit">ENVIAR PARA ANÁLISE</button><button type="button" class="feed-upload-cancel">CANCELAR</button></div><small>Seu post só aparece após aprovação.</small></form></div>');
   const track=photos.querySelector('.feed-track'),notice=photos.querySelector('.feed-notice'),addPost=photos.querySelector('.feed-add'),uploadForm=photos.querySelector('.feed-upload');
   const authors=['@realtrappin','@bbgungangsta','@drakue','@trapdebh406','@snakesnakesnakesnake','@error__406','@f_thesystem','@missionpassed_4','@444racks','@4x406','@fourOsixxx','@profã_406','@406montanha','@150as_ares','@tempo_tempo406','@rto_406','@rtc_music','@outcome_444'];
   let posts=[],current=0,timer=null,reacted=new Set(),ducked=false,previousBeatVolume=0;
@@ -767,12 +767,10 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
       .map(([key,icon,label])=>'<button type="button" class="feed-react" data-photo="'+escaped(post.id)+'" data-reaction="'+key+'" aria-label="Reagir com '+label+'"><b>'+icon+'</b><span data-count="'+key+'">'+counts[key]+'</span></button>').join('');
     return '<article class="feed-post" data-post="'+index+'"><div class="feed-media">'+media+'</div><div class="feed-meta"><span>'+escaped(post.author)+'</span><span class="feed-kind">'+(post.type==='video'?'VÍDEO':'FOTO')+'</span></div><div class="feed-reactions">'+reactions+'<button type="button" class="feed-save" data-save="'+escaped(post.src)+'" data-name="'+escaped(post.id)+'" aria-label="Salvar post">↓ SALVAR</button></div></article>';
   };
-  const activeVideo=()=>track.children[current]?.querySelector('video')||null;
   const bindVideos=()=>track.querySelectorAll('video').forEach(video=>{
     video.addEventListener('play',duckBeat);
     video.addEventListener('pause',restoreBeat);
     video.addEventListener('ended',()=>{
-      if(video!==activeVideo())return;
       if(video.dataset.snakegramLooped!=='1'){
         video.dataset.snakegramLooped='1';
         video.currentTime=0;
@@ -780,62 +778,34 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
         return;
       }
       restoreBeat();
-      setTimeout(()=>goTo(current+1),180);
     });
   });
-  const pauseOffscreenVideos=()=>{track.querySelectorAll('video').forEach((video,index)=>{if(index!==current)video.pause()})};
-  const render=()=>{
-    track.innerHTML=posts.map(card).join('');
-    current=Math.min(current,Math.max(0,posts.length-1));
-    bindVideos();goTo(current,false);
-  };
-  const complete=()=>{
-    clearTimeout(timer);restoreBeat();
-    notice.textContent='Você está passando muito tempo na rede social. Vá escutar as músicas de lançamento da 406.';
-    notice.classList.add('show');
-  };
-  const schedule=()=>{
-    clearTimeout(timer);
-    if(posts.length>1&&!activeVideo())timer=setTimeout(()=>goTo(current+1),5000);
-  };
-  const goTo=(next,shouldSchedule=true)=>{
-    if(!posts.length)return;
-    if(next>=posts.length){complete();return}
-    current=next;
-    track.style.transform='translate3d(-'+(current*100)+'%,0,0)';
-    notice.classList.remove('show');
-    pauseOffscreenVideos();
-    const video=activeVideo();
-    if(video){
-      video.dataset.snakegramLooped='0';
-      video.currentTime=0;
-      const playing=video.play();if(playing)playing.catch(()=>{});
-    }else if(shouldSchedule)schedule();
-  };
+  const render=()=>{track.innerHTML=posts.map(card).join('');bindVideos();};
   const updateCounters=(element,counts)=>{
     Object.entries(formatCounts(counts)).forEach(([key,value])=>{const target=element.querySelector('[data-count="'+key+'"]');if(target)target.textContent=String(value)});
   };
   const react=async button=>{
-    const post=posts[current];if(!post)return;
+    const postElement=button.closest('.feed-post');
+    const post=posts[Number(postElement?.dataset.post)];if(!post)return;
     const reaction=button.dataset.reaction;
     button.classList.remove('reacted');void button.offsetWidth;button.classList.add('reacted');
     try{
       const response=await fetch('./photos-reactions.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({photo:post.id,reaction})});
       const data=await response.json();
       if(!data.ok)throw new Error(data.message||'Não foi possível registrar a reação.');
-      post.reactions=data.reactions;updateCounters(track.children[current],data.reactions);reacted.add(post.id);
+      post.reactions=data.reactions;updateCounters(postElement,data.reactions);reacted.add(post.id);
     }catch(error){notice.textContent=error instanceof Error?error.message:'Não foi possível registrar a reação.';notice.classList.add('show')}
   };
   const saveMedia=button=>{const link=document.createElement('a');link.href=button.dataset.save;link.download=button.dataset.name||'snakegram';link.target='_blank';document.body.append(link);link.click();link.remove()};
   track.addEventListener('click',event=>{const button=event.target.closest('.feed-react');if(button){react(button);return}const save=event.target.closest('.feed-save');if(save)saveMedia(save)});
   const loadPhotos=()=>fetch('./photos.php?v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('gallery');return r.json()}).then(list=>{
     if(!Array.isArray(list)||!list.length){track.innerHTML='<p class="empty-gallery">Nenhuma foto ou vídeo disponível.</p>';return;}
-    posts=shuffle(list).map((post,index)=>({...post,author:post.author||authors[index%authors.length]}));current=0;reacted=new Set();render();schedule();
+    posts=shuffle(list).map((post,index)=>({...post,author:post.author||authors[index%authors.length]}));current=0;reacted=new Set();render();
   }).catch(()=>{track.innerHTML='<p class="empty-gallery">Não foi possível carregar o feed. Tente abrir Snakegram novamente.</p>'});
   addPost.addEventListener('click',()=>{uploadForm.hidden=false;uploadForm.querySelector('[name="handle"]').focus()});
   uploadForm.querySelector('.feed-upload-cancel').addEventListener('click',()=>{uploadForm.hidden=true;uploadForm.reset()});
   uploadForm.addEventListener('submit',async event=>{event.preventDefault();const submit=uploadForm.querySelector('[type="submit"]');submit.disabled=true;submit.textContent='ENVIANDO...';try{const response=await fetch('./snakegram-submit.php',{method:'POST',body:new FormData(uploadForm)});const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.message||'Não foi possível enviar o post.');uploadForm.hidden=true;uploadForm.reset();notice.textContent=data.message;notice.classList.add('show');setTimeout(()=>notice.classList.remove('show'),3200)}catch(error){alert(error instanceof Error?error.message:'Não foi possível enviar o post.')}finally{submit.disabled=false;submit.textContent='ENVIAR PARA ANÁLISE'}});
-  photosIcon.addEventListener('click',()=>{photos.classList.add('open');clearTimeout(timer);loadPhotos();});
+  photosIcon.addEventListener('click',()=>{photos.classList.add('open');notice.textContent='Role para baixo para explorar o feed do Snakegram.';notice.classList.add('show');setTimeout(()=>notice.classList.remove('show'),2600);loadPhotos();});
 })();
 </script><style>
 /* Correção definitiva dos apps essenciais do dock */
@@ -1015,4 +985,13 @@ document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'
 .feed-add{position:absolute;right:16px;top:14px;z-index:8;width:36px;height:36px;border:1px solid #ffffff75;border-radius:50%;background:#ec4738;color:#fff;font:700 26px/1 Arial;cursor:pointer}
 .feed-upload{position:absolute;inset:0;z-index:15;display:grid;align-content:center;gap:12px;padding:28px;background:#090909f2;color:#fff}
 .feed-upload[hidden]{display:none!important}.feed-upload strong{font-size:20px}.feed-upload label{display:grid;gap:6px;font:800 10px Arial;letter-spacing:.1em}.feed-upload input{width:100%;border:1px solid #ffffff42;border-radius:8px;background:#171719;color:#fff;padding:11px;font:14px Arial}.feed-upload div{display:flex;gap:8px}.feed-upload button{border:0;border-radius:8px;padding:11px 13px;background:#1ed760;color:#07140a;font:800 11px Arial;cursor:pointer}.feed-upload .feed-upload-cancel{background:#ffffff1a;color:#fff}.feed-upload small{color:#aaa;font:12px Arial}@media(max-width:700px){.feed-add{right:10px;top:10px;width:32px;height:32px;font-size:23px}.feed-upload{padding:18px}}
+</style>
+<style>
+/* Snakegram vertical: rolagem manual, sem avanço automático. */
+.feed-406-window .photo-feed{overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;scroll-snap-type:y proximity!important;padding:10px!important;scroll-padding-top:10px!important;-webkit-overflow-scrolling:touch!important}
+.feed-406-window .feed-track{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;width:100%!important;height:auto!important;gap:14px!important;transform:none!important;transition:none!important;overflow:visible!important}
+.feed-406-window .feed-post{flex:none!important;width:100%!important;min-width:0!important;max-width:none!important;height:min(68dvh,560px)!important;min-height:360px!important;scroll-snap-align:start!important}
+.feed-406-window .feed-media{height:0!important;flex:1 1 0!important;min-height:0!important}
+.feed-add{width:auto!important;height:auto!important;min-height:32px!important;border-radius:999px!important;padding:8px 12px!important;font:800 10px/1 Arial!important;letter-spacing:.08em!important}
+@media(max-width:700px){.feed-406-window .photo-feed{padding:8px!important}.feed-406-window .feed-track{gap:12px!important}.feed-406-window .feed-post{height:calc(100dvh - 92px)!important;min-height:360px!important}.feed-add{right:10px!important;top:9px!important;padding:7px 10px!important;font-size:9px!important}}
 </style>
