@@ -269,6 +269,39 @@
       .fineprint, footer { display:none; }
     }
 
+  
+    /* Layout final do pré-save no iframe do 406OS (mobile em paisagem). */
+    @media (max-height:520px) and (orientation:landscape) {
+      main { padding:3px; align-content:start; }
+      .card {
+        display:grid;
+        grid-template-columns:160px minmax(0,1fr);
+        align-items:center;
+        width:100%;
+        height:auto;
+        min-height:0;
+        padding:5px;
+        gap:8px;
+        overflow:hidden;
+      }
+      .cover {
+        width:160px;
+        height:160px;
+        min-height:160px;
+        max-height:160px;
+        aspect-ratio:1/1;
+        object-fit:cover;
+      }
+      .content { padding:2px 4px; overflow:visible; }
+      .topline { font-size:6px; }
+      .eyebrow { font-size:6px; margin-bottom:2px; }
+      h1 { font-size:clamp(21px,3.8vw,30px); }
+      .artists { margin-top:3px; font-size:8px; white-space:nowrap; }
+      .countdown { margin:5px 0; }
+      .spotify { min-height:30px; height:30px; padding:5px 8px; font-size:9px; }
+      .spotify svg { width:13px; height:13px; }
+    }
+
   </style>
 </head>
 <body>
