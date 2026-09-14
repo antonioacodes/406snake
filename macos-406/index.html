@@ -747,8 +747,8 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   folder.addEventListener('click',()=>rec.classList.add('open'));
 
   const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Snakegram');photosIcon.innerHTML='<img src="./icon/dock/snakegram.png?v=20260914f" alt="Snakegram" onerror="this.src=\'./icon/dock/photos.png\'">';document.querySelector('.dock')?.append(photosIcon);
-  const photos=makeWindow('photos-window feed-406-window','Snakegram','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><p class="feed-notice"></p></div>');
-  const track=photos.querySelector('.feed-track'),notice=photos.querySelector('.feed-notice');
+  const photos=makeWindow('photos-window feed-406-window','Snakegram','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><p class="feed-notice"></p><button type="button" class="feed-add" aria-label="Publicar no Snakegram">+</button><form class="feed-upload" hidden><strong>Publicar no Snakegram</strong><label>SEU @<input name="handle" maxlength="31" placeholder="@seuuser" required></label><label>FOTO OU VÍDEO<input name="media" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" required></label><div><button type="submit">ENVIAR PARA ANÁLISE</button><button type="button" class="feed-upload-cancel">CANCELAR</button></div><small>Seu post só aparece após aprovação.</small></form></div>');
+  const track=photos.querySelector('.feed-track'),notice=photos.querySelector('.feed-notice'),addPost=photos.querySelector('.feed-add'),uploadForm=photos.querySelector('.feed-upload');
   const authors=['@realtrappin','@bbgungangsta','@drakue','@trapdebh406','@snakesnakesnakesnake','@error__406','@f_thesystem','@missionpassed_4','@444racks','@4x406','@fourOsixxx','@profã_406','@406montanha','@150as_ares','@tempo_tempo406','@rto_406','@rtc_music','@outcome_444'];
   let posts=[],current=0,timer=null,reacted=new Set(),ducked=false,previousBeatVolume=0;
 
@@ -830,8 +830,11 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   track.addEventListener('click',event=>{const button=event.target.closest('.feed-react');if(button){react(button);return}const save=event.target.closest('.feed-save');if(save)saveMedia(save)});
   const loadPhotos=()=>fetch('./photos.php?v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('gallery');return r.json()}).then(list=>{
     if(!Array.isArray(list)||!list.length){track.innerHTML='<p class="empty-gallery">Nenhuma foto ou vídeo disponível.</p>';return;}
-    posts=shuffle(list).map((post,index)=>({...post,author:authors[index%authors.length]}));current=0;reacted=new Set();render();schedule();
+    posts=shuffle(list).map((post,index)=>({...post,author:post.author||authors[index%authors.length]}));current=0;reacted=new Set();render();schedule();
   }).catch(()=>{track.innerHTML='<p class="empty-gallery">Não foi possível carregar o feed. Tente abrir Snakegram novamente.</p>'});
+  addPost.addEventListener('click',()=>{uploadForm.hidden=false;uploadForm.querySelector('[name="handle"]').focus()});
+  uploadForm.querySelector('.feed-upload-cancel').addEventListener('click',()=>{uploadForm.hidden=true;uploadForm.reset()});
+  uploadForm.addEventListener('submit',async event=>{event.preventDefault();const submit=uploadForm.querySelector('[type="submit"]');submit.disabled=true;submit.textContent='ENVIANDO...';try{const response=await fetch('./snakegram-submit.php',{method:'POST',body:new FormData(uploadForm)});const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.message||'Não foi possível enviar o post.');uploadForm.hidden=true;uploadForm.reset();notice.textContent=data.message;notice.classList.add('show');setTimeout(()=>notice.classList.remove('show'),3200)}catch(error){alert(error instanceof Error?error.message:'Não foi possível enviar o post.')}finally{submit.disabled=false;submit.textContent='ENVIAR PARA ANÁLISE'}});
   photosIcon.addEventListener('click',()=>{photos.classList.add('open');clearTimeout(timer);loadPhotos();});
 })();
 </script><style>
@@ -1008,3 +1011,8 @@ document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'
 @media(max-width:700px){#shutdown-406os{top:3px;font-size:9px;padding:4px 8px}.navbar{min-height:32px!important}.navbar li{font-size:10px!important}.montana-map{left:1vw!important;top:10vh!important;width:48vw!important;height:79vh!important}.bh-map{left:auto!important;right:1vw!important;top:10vh!important;width:48vw!important;height:79vh!important}.map-406-window .app-bar{height:32px;padding:0 7px;font-size:9px}.map-406-window iframe{height:calc(100% - 32px)}.rec-window,.photos-window{left:1vw!important;top:8vh!important;width:98vw!important;height:87vh!important}.safari-city{left:1vw!important;top:8vh!important;width:98vw!important;height:86vh!important}.dock{transform:scale(.82);transform-origin:bottom center}.desktop{overflow:hidden!important}}
 </style><script>document.querySelector('#shutdown-406os')?.addEventListener('click',()=>{try{window.parent.document.querySelector('#computer')?.classList.remove('open')}catch(_){}});</script></body>
 </html>
+<style>
+.feed-add{position:absolute;right:16px;top:14px;z-index:8;width:36px;height:36px;border:1px solid #ffffff75;border-radius:50%;background:#ec4738;color:#fff;font:700 26px/1 Arial;cursor:pointer}
+.feed-upload{position:absolute;inset:0;z-index:15;display:grid;align-content:center;gap:12px;padding:28px;background:#090909f2;color:#fff}
+.feed-upload[hidden]{display:none!important}.feed-upload strong{font-size:20px}.feed-upload label{display:grid;gap:6px;font:800 10px Arial;letter-spacing:.1em}.feed-upload input{width:100%;border:1px solid #ffffff42;border-radius:8px;background:#171719;color:#fff;padding:11px;font:14px Arial}.feed-upload div{display:flex;gap:8px}.feed-upload button{border:0;border-radius:8px;padding:11px 13px;background:#1ed760;color:#07140a;font:800 11px Arial;cursor:pointer}.feed-upload .feed-upload-cancel{background:#ffffff1a;color:#fff}.feed-upload small{color:#aaa;font:12px Arial}@media(max-width:700px){.feed-add{right:10px;top:10px;width:32px;height:32px;font-size:23px}.feed-upload{padding:18px}}
+</style>
