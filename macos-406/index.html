@@ -761,13 +761,28 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   const card=(post,index)=>{
     const counts=formatCounts(post.reactions);
     const media=post.type==='video'
-      ? '<video src="'+escaped(post.src)+'" controls playsinline preload="metadata"></video>'
+      ? '<video src="'+escaped(post.src)+'" controls muted autoplay playsinline preload="metadata"></video>'
       : '<img src="'+escaped(post.src)+'" alt="Post de '+escaped(post.author)+'" loading="'+(index<2?'eager':'lazy')+'">';
     const reactions=[['heart','♥','Coração'],['laugh','😂','Riso'],['four','4','Quatro']]
       .map(([key,icon,label])=>'<button type="button" class="feed-react" data-photo="'+escaped(post.id)+'" data-reaction="'+key+'" aria-label="Reagir com '+label+'"><b>'+icon+'</b><span data-count="'+key+'">'+counts[key]+'</span></button>').join('');
     return '<article class="feed-post" data-post="'+index+'"><div class="feed-media">'+media+'</div><div class="feed-meta"><span>'+escaped(post.author)+'</span><span class="feed-kind">'+(post.type==='video'?'VÍDEO':'FOTO')+'</span></div><div class="feed-reactions">'+reactions+'<button type="button" class="feed-save" data-save="'+escaped(post.src)+'" data-name="'+escaped(post.id)+'" aria-label="Salvar post">↓ SALVAR</button></div></article>';
   };
-  const bindVideos=()=>track.querySelectorAll('video').forEach(video=>{video.addEventListener('play',duckBeat);video.addEventListener('pause',restoreBeat);video.addEventListener('ended',restoreBeat)});
+  const activeVideo=()=>track.children[current]?.querySelector('video')||null;
+  const bindVideos=()=>track.querySelectorAll('video').forEach(video=>{
+    video.addEventListener('play',duckBeat);
+    video.addEventListener('pause',restoreBeat);
+    video.addEventListener('ended',()=>{
+      if(video!==activeVideo())return;
+      if(video.dataset.snakegramLooped!=='1'){
+        video.dataset.snakegramLooped='1';
+        video.currentTime=0;
+        const replay=video.play();if(replay)replay.catch(()=>{});
+        return;
+      }
+      restoreBeat();
+      setTimeout(()=>goTo(current+1),180);
+    });
+  });
   const pauseOffscreenVideos=()=>{track.querySelectorAll('video').forEach((video,index)=>{if(index!==current)video.pause()})};
   const render=()=>{
     track.innerHTML=posts.map(card).join('');
@@ -779,7 +794,10 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
     notice.textContent='Você está passando muito tempo na rede social. Vá escutar as músicas de lançamento da 406.';
     notice.classList.add('show');
   };
-  const schedule=()=>{clearTimeout(timer);if(posts.length>1)timer=setTimeout(()=>goTo(current+1),7000)};
+  const schedule=()=>{
+    clearTimeout(timer);
+    if(posts.length>1&&!activeVideo())timer=setTimeout(()=>goTo(current+1),5000);
+  };
   const goTo=(next,shouldSchedule=true)=>{
     if(!posts.length)return;
     if(next>=posts.length){complete();return}
@@ -787,7 +805,12 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
     track.style.transform='translate3d(-'+(current*100)+'%,0,0)';
     notice.classList.remove('show');
     pauseOffscreenVideos();
-    if(shouldSchedule)schedule();
+    const video=activeVideo();
+    if(video){
+      video.dataset.snakegramLooped='0';
+      video.currentTime=0;
+      const playing=video.play();if(playing)playing.catch(()=>{});
+    }else if(shouldSchedule)schedule();
   };
   const updateCounters=(element,counts)=>{
     Object.entries(formatCounts(counts)).forEach(([key,value])=>{const target=element.querySelector('[data-count="'+key+'"]');if(target)target.textContent=String(value)});
@@ -801,7 +824,6 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
       const data=await response.json();
       if(!data.ok)throw new Error(data.message||'Não foi possível registrar a reação.');
       post.reactions=data.reactions;updateCounters(track.children[current],data.reactions);reacted.add(post.id);
-      setTimeout(()=>{if(reacted.size>=posts.length)complete();else goTo(current+1)},2000);
     }catch(error){notice.textContent=error instanceof Error?error.message:'Não foi possível registrar a reação.';notice.classList.add('show')}
   };
   const saveMedia=button=>{const link=document.createElement('a');link.href=button.dataset.save;link.download=button.dataset.name||'snakegram';link.target='_blank';document.body.append(link);link.click();link.remove()};
@@ -963,7 +985,8 @@ document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'
 .feed-406-window .photo-feed{height:calc(100% - 43px)!important;width:100%!important;overflow:hidden!important}
 .feed-406-window .feed-track{display:flex!important;flex-wrap:nowrap!important;width:100%!important;max-width:100%!important;height:100%!important;overflow:visible!important}
 .feed-406-window .feed-post{flex:0 0 100%!important;width:100%!important;min-width:100%!important;max-width:100%!important;height:100%!important;box-sizing:border-box!important}
-.feed-406-window .feed-media img,.feed-406-window .feed-media video{object-fit:contain!important;max-width:100%!important;max-height:100%!important}
+.feed-406-window .feed-media{height:calc(100% - 108px)!important;min-height:0!important;display:grid!important;place-items:center!important;overflow:hidden!important;background:#050505!important}
+.feed-406-window .feed-media img,.feed-406-window .feed-media video{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;max-width:100%!important;max-height:100%!important}
 .feed-406-window .feed-progress{display:none!important}
 .feed-save{margin-left:auto;min-height:38px;border:1px solid #ffffff55;border-radius:999px;background:#ffffff12;color:#fff;padding:7px 12px;cursor:pointer;font:700 10px/1 Arial;letter-spacing:.07em}
 .feed-save:hover{background:#ffffff24}
