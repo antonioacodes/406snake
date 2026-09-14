@@ -1,0 +1,16 @@
+{
+  "name": "406 — Quarto",
+  "short_name": "406",
+  "start_url": "/room.html?source=webapp",
+  "display": "standalone",
+  "background_color": "#050303",
+  "theme_color": "#050303",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
