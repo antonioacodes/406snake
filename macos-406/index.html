@@ -1072,3 +1072,9 @@ document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'
 /* O formulário permanece como o primeiro elemento visível do feed. */
 .feed-406-window.open .photo-feed>.feed-upload{visibility:visible!important;opacity:1!important;display:block!important}
 </style>
+
+<style>
+/* Não encaixa no primeiro post: o usuário pode permanecer no formulário do topo. */
+.feed-406-window .photo-feed{scroll-snap-type:none!important;scroll-padding-top:0!important}
+.feed-406-window .feed-post{scroll-snap-align:none!important}
+</style>
