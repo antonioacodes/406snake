@@ -144,3 +144,13 @@ const resume=requested||!beat.paused;tracks=valid;choose(0,resume);
 }).catch(()=>{});
 })();
 </script>
+<style id="computer-fullscreen-final">
+#computer .window{padding:0!important}
+#computer .window>iframe{display:block!important;width:100%!important;height:100%!important}
+#computer .computer-power{position:absolute!important;z-index:70!important;top:4px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important}
+@media(max-width:1024px),(hover:none) and (pointer:coarse){
+  #computer .window{padding:0!important}
+  #computer .window>iframe{height:100%!important}
+  #computer .computer-power{top:max(3px,env(safe-area-inset-top))!important}
+}
+</style>
