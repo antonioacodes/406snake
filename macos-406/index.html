@@ -747,7 +747,7 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   folder.addEventListener('click',()=>rec.classList.add('open'));
 
   const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Snakegram');photosIcon.innerHTML='<img src="./icon/dock/snakegram.png?v=20260914f" alt="Snakegram" onerror="this.src=\'./icon/dock/photos.png\'">';document.querySelector('.dock')?.append(photosIcon);
-  const photos=makeWindow('photos-window feed-406-window','Snakegram','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><p class="feed-notice"></p><button type="button" class="feed-add" aria-label="Publicar no Snakegram">PUBLICAR</button><form class="feed-upload" hidden><strong>Publicar no Snakegram</strong><label>SEU @<input name="handle" maxlength="31" placeholder="@seuuser" required></label><label>FOTO OU VÍDEO<input name="media" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" required></label><div><button type="submit">ENVIAR PARA ANÁLISE</button><button type="button" class="feed-upload-cancel">CANCELAR</button></div><small>Seu post só aparece após aprovação.</small></form></div>');
+  const photos=makeWindow('photos-window feed-406-window','Snakegram','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><p class="feed-notice"></p><button type="button" class="feed-add" aria-label="Publicar no Snakegram">Publicar no Snakegram</button><form class="feed-upload" hidden><strong>Publicar no Snakegram</strong><label>SEU @<input name="handle" maxlength="31" placeholder="@seuuser" required></label><label>FOTO OU VÍDEO<input name="media" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" required></label><div><button type="submit">ENVIAR PARA ANÁLISE</button><button type="button" class="feed-upload-cancel">CANCELAR</button></div><small>Seu post só aparece após aprovação.</small></form></div>');
   const track=photos.querySelector('.feed-track'),notice=photos.querySelector('.feed-notice'),addPost=photos.querySelector('.feed-add'),uploadForm=photos.querySelector('.feed-upload');
   const authors=['@realtrappin','@bbgungangsta','@drakue','@trapdebh406','@snakesnakesnakesnake','@error__406','@f_thesystem','@missionpassed_4','@444racks','@4x406','@fourOsixxx','@profã_406','@406montanha','@150as_ares','@tempo_tempo406','@rto_406','@rtc_music','@outcome_444'];
   let posts=[],current=0,timer=null,reacted=new Set(),ducked=false,previousBeatVolume=0;
@@ -994,4 +994,10 @@ document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'
 .feed-406-window .feed-media{height:0!important;flex:1 1 0!important;min-height:0!important}
 .feed-add{width:auto!important;height:auto!important;min-height:32px!important;border-radius:999px!important;padding:8px 12px!important;font:800 10px/1 Arial!important;letter-spacing:.08em!important}
 @media(max-width:700px){.feed-406-window .photo-feed{padding:8px!important}.feed-406-window .feed-track{gap:12px!important}.feed-406-window .feed-post{height:calc(100dvh - 92px)!important;min-height:360px!important}.feed-add{right:10px!important;top:9px!important;padding:7px 10px!important;font-size:9px!important}}
+</style>
+
+<style>
+/* Ação de publicação sempre disponível enquanto o feed rola. */
+.feed-406-window .feed-add{position:sticky!important;top:8px!important;right:auto!important;left:auto!important;display:block!important;margin:8px 8px -40px auto!important;z-index:30!important;width:max-content!important}
+@media(max-width:700px){.feed-406-window .feed-add{top:6px!important;margin:6px 6px -38px auto!important;font-size:9px!important}}
 </style>
