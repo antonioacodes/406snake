@@ -13,6 +13,18 @@ if (is_file($dataFile)) {
     $stored = is_array($decoded) ? $decoded : [];
 }
 $posts = [];
+$authors = [];
+$moderationFile = __DIR__ . '/data/snakegram-posts.json';
+if (is_file($moderationFile)) {
+    $moderation = json_decode((string)file_get_contents($moderationFile), true);
+    if (is_array($moderation)) {
+        foreach ($moderation as $post) {
+            if (is_array($post) && ($post['status'] ?? '') === 'approved' && isset($post['file'])) {
+                $authors[(string)$post['file']] = (string)($post['author'] ?? '@snakegram');
+            }
+        }
+    }
+}
 if (is_dir($directory)) {
     foreach (scandir($directory) ?: [] as $file) {
         if ($file === '' || $file[0] === '.' || !is_file($directory . '/' . $file)) continue;
@@ -24,6 +36,7 @@ if (is_dir($directory)) {
             'id' => $file,
             'src' => 'photos/' . rawurlencode($file) . '?v=' . filemtime($directory . '/' . $file),
             'type' => $type,
+            'author' => $authors[$file] ?? null,
             'reactions' => [
                 'heart' => max(0, (int)($counts['heart'] ?? 0)),
                 'laugh' => max(0, (int)($counts['laugh'] ?? 0)),
