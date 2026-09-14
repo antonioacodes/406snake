@@ -746,31 +746,36 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   artists.forEach(([name,url])=>{const item=document.createElement('button');item.className='rec-artist';item.textContent=name;item.addEventListener('click',()=>{const slug=name.toLowerCase().replace(/[^a-z0-9]+/g,'-');const playerWindow=makeWindow('spotify-artist-window spotify-'+slug,'Spotify — '+name,'<iframe title="Spotify — '+name+'" src="'+url+'" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>');playerWindow.classList.add('open')});files.append(item);});
   folder.addEventListener('click',()=>rec.classList.add('open'));
 
-  const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Fotos');photosIcon.innerHTML='<img src="./icon/dock/photos.png" alt="Fotos">';document.querySelector('.dock')?.append(photosIcon);
-  const photos=makeWindow('photos-window feed-406-window','Fotos','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><div class="feed-progress"></div><p class="feed-notice"></p></div>');
-  const feed=photos.querySelector('.photo-feed'),track=photos.querySelector('.feed-track'),progress=photos.querySelector('.feed-progress'),notice=photos.querySelector('.feed-notice');
-  let posts=[],current=0,timer=null,reacted=new Set();
+  const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Snakegram');photosIcon.innerHTML='<img src="./icon/dock/snakegram.png" alt="Snakegram" onerror="this.src=\'./icon/dock/photos.png\'">';document.querySelector('.dock')?.append(photosIcon);
+  const photos=makeWindow('photos-window feed-406-window','Snakegram','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><p class="feed-notice"></p></div>');
+  const track=photos.querySelector('.feed-track'),notice=photos.querySelector('.feed-notice');
+  const authors=['@realtrappin','@bbgungangsta','@drakue','@trapdebh406','@snakesnakesnakesnake','@error__406','@f_thesystem','@missionpassed_4','@444racks','@4x406','@fourOsixxx','@profã_406','@406montanha','@150as_ares','@tempo_tempo406','@rto_406','@rtc_music','@outcome_444'];
+  let posts=[],current=0,timer=null,reacted=new Set(),ducked=false,previousBeatVolume=0;
 
   const shuffle=list=>{const copy=[...list];for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]]}return copy};
   const escaped=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const formatCounts=counts=>({heart:Number(counts?.heart||0),laugh:Number(counts?.laugh||0),four:Number(counts?.four||0)});
+  const roomBeat=()=>{try{return window.parent?.document?.querySelector('#beat')||null}catch(_){return null}};
+  const duckBeat=()=>{const beat=roomBeat();if(!beat||ducked)return;previousBeatVolume=beat.volume;beat.volume=Math.max(.02,previousBeatVolume*.35);ducked=true};
+  const restoreBeat=()=>{const beat=roomBeat();if(!beat||!ducked)return;beat.volume=previousBeatVolume;ducked=false};
   const card=(post,index)=>{
     const counts=formatCounts(post.reactions);
     const media=post.type==='video'
-      ? '<video src="'+escaped(post.src)+'" muted loop playsinline preload="metadata"></video>'
-      : '<img src="'+escaped(post.src)+'" alt="Post '+(index+1)+'" loading="'+(index<2?'eager':'lazy')+'">';
+      ? '<video src="'+escaped(post.src)+'" controls playsinline preload="metadata"></video>'
+      : '<img src="'+escaped(post.src)+'" alt="Post de '+escaped(post.author)+'" loading="'+(index<2?'eager':'lazy')+'">';
     const reactions=[['heart','♥','Coração'],['laugh','😂','Riso'],['four','4','Quatro']]
       .map(([key,icon,label])=>'<button type="button" class="feed-react" data-photo="'+escaped(post.id)+'" data-reaction="'+key+'" aria-label="Reagir com '+label+'"><b>'+icon+'</b><span data-count="'+key+'">'+counts[key]+'</span></button>').join('');
-    return '<article class="feed-post" data-post="'+index+'"><div class="feed-media">'+media+'</div><div class="feed-meta"><span>406REC · POST '+String(index+1).padStart(2,'0')+'</span><span class="feed-kind">'+(post.type==='video'?'VÍDEO':'FOTO')+'</span></div><div class="feed-reactions">'+reactions+'</div></article>';
+    return '<article class="feed-post" data-post="'+index+'"><div class="feed-media">'+media+'</div><div class="feed-meta"><span>'+escaped(post.author)+'</span><span class="feed-kind">'+(post.type==='video'?'VÍDEO':'FOTO')+'</span></div><div class="feed-reactions">'+reactions+'<button type="button" class="feed-save" data-save="'+escaped(post.src)+'" data-name="'+escaped(post.id)+'" aria-label="Salvar post">↓ SALVAR</button></div></article>';
   };
-  const playCurrentVideo=()=>{track.querySelectorAll('video').forEach((video,index)=>{if(index===current)video.play().catch(()=>{});else video.pause()})};
+  const bindVideos=()=>track.querySelectorAll('video').forEach(video=>{video.addEventListener('play',duckBeat);video.addEventListener('pause',restoreBeat);video.addEventListener('ended',restoreBeat)});
+  const pauseOffscreenVideos=()=>{track.querySelectorAll('video').forEach((video,index)=>{if(index!==current)video.pause()})};
   const render=()=>{
     track.innerHTML=posts.map(card).join('');
     current=Math.min(current,Math.max(0,posts.length-1));
-    goTo(current,false);
+    bindVideos();goTo(current,false);
   };
   const complete=()=>{
-    clearTimeout(timer);
+    clearTimeout(timer);restoreBeat();
     notice.textContent='Você está passando muito tempo na rede social. Vá escutar as músicas de lançamento da 406.';
     notice.classList.add('show');
   };
@@ -779,10 +784,9 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
     if(!posts.length)return;
     if(next>=posts.length){complete();return}
     current=next;
-    track.style.transform='translateX(-'+(current*100)+'%)';
-    progress.textContent=(current+1)+' / '+posts.length;
+    track.style.transform='translate3d(-'+(current*100)+'%,0,0)';
     notice.classList.remove('show');
-    playCurrentVideo();
+    pauseOffscreenVideos();
     if(shouldSchedule)schedule();
   };
   const updateCounters=(element,counts)=>{
@@ -796,17 +800,16 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
       const response=await fetch('./photos-reactions.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({photo:post.id,reaction})});
       const data=await response.json();
       if(!data.ok)throw new Error(data.message||'Não foi possível registrar a reação.');
-      post.reactions=data.reactions;
-      updateCounters(track.children[current],data.reactions);
-      reacted.add(post.id);
+      post.reactions=data.reactions;updateCounters(track.children[current],data.reactions);reacted.add(post.id);
       setTimeout(()=>{if(reacted.size>=posts.length)complete();else goTo(current+1)},2000);
     }catch(error){notice.textContent=error instanceof Error?error.message:'Não foi possível registrar a reação.';notice.classList.add('show')}
   };
-  track.addEventListener('click',event=>{const button=event.target.closest('.feed-react');if(button)react(button)});
+  const saveMedia=button=>{const link=document.createElement('a');link.href=button.dataset.save;link.download=button.dataset.name||'snakegram';link.target='_blank';document.body.append(link);link.click();link.remove()};
+  track.addEventListener('click',event=>{const button=event.target.closest('.feed-react');if(button){react(button);return}const save=event.target.closest('.feed-save');if(save)saveMedia(save)});
   const loadPhotos=()=>fetch('./photos.php',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('gallery');return r.json()}).then(list=>{
     if(!Array.isArray(list)||!list.length){track.innerHTML='<p class="empty-gallery">Nenhuma foto ou vídeo disponível.</p>';return;}
-    posts=shuffle(list);current=Math.floor(Math.random()*posts.length);reacted=new Set();render();schedule();
-  }).catch(()=>{track.innerHTML='<p class="empty-gallery">Não foi possível carregar o feed. Tente abrir Fotos novamente.</p>'});
+    posts=shuffle(list).map((post,index)=>({...post,author:authors[index%authors.length]}));current=0;reacted=new Set();render();schedule();
+  }).catch(()=>{track.innerHTML='<p class="empty-gallery">Não foi possível carregar o feed. Tente abrir Snakegram novamente.</p>'});
   photosIcon.addEventListener('click',()=>{photos.classList.add('open');clearTimeout(timer);loadPhotos();});
 })();
 </script><style>
@@ -954,5 +957,18 @@ document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'
 .feed-notice{position:absolute;left:50%;bottom:16px;z-index:3;width:min(90%,420px);margin:0;padding:12px 15px;transform:translate(-50%,130%);opacity:0;transition:.35s;background:#f2ede6;color:#151110;border-radius:9px;text-align:center;font:700 12px/1.45 Arial;box-shadow:0 12px 36px #0008}
 .feed-notice.show{transform:translate(-50%,0);opacity:1}
 @media(max-width:700px){.feed-406-window{left:0!important;top:0!important;width:100vw!important;height:100dvh!important;border-radius:0!important}.feed-post{padding:8px 8px 16px}.feed-meta{padding-top:9px}.feed-react{min-height:42px;padding:8px 13px}.feed-progress{top:8px;right:8px}.feed-notice{bottom:12px;font-size:11px}}
+</style><style>
+/* Snakegram: um post por vez, sem cortes e com final imersivo. */
+.feed-406-window{height:min(760px,88vh)!important}
+.feed-406-window .photo-feed{height:calc(100% - 43px)!important;width:100%!important;overflow:hidden!important}
+.feed-406-window .feed-track{display:flex!important;flex-wrap:nowrap!important;width:100%!important;max-width:100%!important;height:100%!important;overflow:visible!important}
+.feed-406-window .feed-post{flex:0 0 100%!important;width:100%!important;min-width:100%!important;max-width:100%!important;height:100%!important;box-sizing:border-box!important}
+.feed-406-window .feed-media img,.feed-406-window .feed-media video{object-fit:contain!important;max-width:100%!important;max-height:100%!important}
+.feed-406-window .feed-progress{display:none!important}
+.feed-save{margin-left:auto;min-height:38px;border:1px solid #ffffff55;border-radius:999px;background:#ffffff12;color:#fff;padding:7px 12px;cursor:pointer;font:700 10px/1 Arial;letter-spacing:.07em}
+.feed-save:hover{background:#ffffff24}
+.feed-notice{inset:0!important;left:0!important;bottom:auto!important;width:auto!important;margin:0!important;padding:clamp(24px,8%,70px)!important;transform:none!important;display:grid!important;place-items:center!important;opacity:0!important;pointer-events:none!important;border-radius:0!important;background:rgba(6,6,8,.72)!important;color:#fff!important;backdrop-filter:blur(13px)!important;-webkit-backdrop-filter:blur(13px)!important;font:800 clamp(18px,3vw,28px)/1.3 Arial!important;box-shadow:none!important}
+.feed-notice.show{transform:none!important;opacity:1!important;pointer-events:auto!important}
+@media(max-width:700px){.feed-406-window{height:auto!important}.feed-save{min-height:42px}.feed-reactions{gap:6px}.feed-react{padding:8px 10px}.feed-meta{padding-bottom:7px}}
 </style></body>
 </html>
