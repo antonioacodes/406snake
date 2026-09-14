@@ -27,9 +27,17 @@ $dataDirectory = __DIR__ . '/data';
 if (!is_dir($dataDirectory) && !mkdir($dataDirectory, 0755, true) && !is_dir($dataDirectory)) {
     response(['ok' => false, 'message' => 'Não foi possível salvar a reação.'], 500);
 }
+if (!is_writable($dataDirectory)) {
+    response(['ok' => false, 'message' => 'A pasta de reações não tem permissão de escrita na VPS.'], 500);
+}
+
 $file = $dataDirectory . '/photos-reactions.json';
 $handle = fopen($file, 'c+');
-if ($handle === false || !flock($handle, LOCK_EX)) response(['ok' => false, 'message' => 'Não foi possível salvar a reação.'], 500);
+if ($handle === false) response(['ok' => false, 'message' => 'Não foi possível abrir o arquivo de reações.'], 500);
+if (!flock($handle, LOCK_EX)) {
+    fclose($handle);
+    response(['ok' => false, 'message' => 'Não foi possível bloquear o arquivo de reações.'], 500);
+}
 $raw = stream_get_contents($handle);
 $data = json_decode($raw ?: '{}', true);
 $data = is_array($data) ? $data : [];
@@ -46,9 +54,15 @@ if ($previous !== $reaction) {
     $data[$photo][$reaction]++;
     $data[$photo]['users'][$user] = $reaction;
 }
+$encoded = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
 rewind($handle);
 ftruncate($handle, 0);
-fwrite($handle, json_encode($data, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE));
+$written = $encoded === false ? false : fwrite($handle, $encoded);
+if ($written === false) {
+    flock($handle, LOCK_UN);
+    fclose($handle);
+    response(['ok' => false, 'message' => 'Não foi possível gravar a reação no servidor.'], 500);
+}
 fflush($handle);
 flock($handle, LOCK_UN);
 fclose($handle);
