@@ -747,14 +747,67 @@ const terminal=document.querySelector('.terminal'),terminalOpen=document.querySe
   folder.addEventListener('click',()=>rec.classList.add('open'));
 
   const photosIcon=document.createElement('button');photosIcon.type='button';photosIcon.className='icon photos-406';photosIcon.setAttribute('aria-label','Abrir Fotos');photosIcon.innerHTML='<img src="./icon/dock/photos.png" alt="Fotos">';document.querySelector('.dock')?.append(photosIcon);
-  const photos=makeWindow('photos-window','Fotos','<div class="photos-grid"><p class="empty-gallery">Nenhuma imagem encontrada.</p></div>');
-  const grid=photos.querySelector('.photos-grid');
+  const photos=makeWindow('photos-window feed-406-window','Fotos','<div class="photo-feed"><div class="feed-track" aria-live="polite"></div><div class="feed-progress"></div><p class="feed-notice"></p></div>');
+  const feed=photos.querySelector('.photo-feed'),track=photos.querySelector('.feed-track'),progress=photos.querySelector('.feed-progress'),notice=photos.querySelector('.feed-notice');
+  let posts=[],current=0,timer=null,reacted=new Set();
+
+  const shuffle=list=>{const copy=[...list];for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]]}return copy};
+  const escaped=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const formatCounts=counts=>({heart:Number(counts?.heart||0),laugh:Number(counts?.laugh||0),four:Number(counts?.four||0)});
+  const card=(post,index)=>{
+    const counts=formatCounts(post.reactions);
+    const media=post.type==='video'
+      ? '<video src="'+escaped(post.src)+'" muted loop playsinline preload="metadata"></video>'
+      : '<img src="'+escaped(post.src)+'" alt="Post '+(index+1)+'" loading="'+(index<2?'eager':'lazy')+'">';
+    const reactions=[['heart','♥','Coração'],['laugh','😂','Riso'],['four','4','Quatro']]
+      .map(([key,icon,label])=>'<button type="button" class="feed-react" data-photo="'+escaped(post.id)+'" data-reaction="'+key+'" aria-label="Reagir com '+label+'"><b>'+icon+'</b><span data-count="'+key+'">'+counts[key]+'</span></button>').join('');
+    return '<article class="feed-post" data-post="'+index+'"><div class="feed-media">'+media+'</div><div class="feed-meta"><span>406REC · POST '+String(index+1).padStart(2,'0')+'</span><span class="feed-kind">'+(post.type==='video'?'VÍDEO':'FOTO')+'</span></div><div class="feed-reactions">'+reactions+'</div></article>';
+  };
+  const playCurrentVideo=()=>{track.querySelectorAll('video').forEach((video,index)=>{if(index===current)video.play().catch(()=>{});else video.pause()})};
+  const render=()=>{
+    track.innerHTML=posts.map(card).join('');
+    current=Math.min(current,Math.max(0,posts.length-1));
+    goTo(current,false);
+  };
+  const complete=()=>{
+    clearTimeout(timer);
+    notice.textContent='Você está passando muito tempo na rede social. Vá escutar as músicas de lançamento da 406.';
+    notice.classList.add('show');
+  };
+  const schedule=()=>{clearTimeout(timer);if(posts.length>1)timer=setTimeout(()=>goTo(current+1),7000)};
+  const goTo=(next,shouldSchedule=true)=>{
+    if(!posts.length)return;
+    if(next>=posts.length){complete();return}
+    current=next;
+    track.style.transform='translateX(-'+(current*100)+'%)';
+    progress.textContent=(current+1)+' / '+posts.length;
+    notice.classList.remove('show');
+    playCurrentVideo();
+    if(shouldSchedule)schedule();
+  };
+  const updateCounters=(element,counts)=>{
+    Object.entries(formatCounts(counts)).forEach(([key,value])=>{const target=element.querySelector('[data-count="'+key+'"]');if(target)target.textContent=String(value)});
+  };
+  const react=async button=>{
+    const post=posts[current];if(!post)return;
+    const reaction=button.dataset.reaction;
+    button.classList.remove('reacted');void button.offsetWidth;button.classList.add('reacted');
+    try{
+      const response=await fetch('./photos-reactions.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({photo:post.id,reaction})});
+      const data=await response.json();
+      if(!data.ok)throw new Error(data.message||'Não foi possível registrar a reação.');
+      post.reactions=data.reactions;
+      updateCounters(track.children[current],data.reactions);
+      reacted.add(post.id);
+      setTimeout(()=>{if(reacted.size>=posts.length)complete();else goTo(current+1)},2000);
+    }catch(error){notice.textContent=error instanceof Error?error.message:'Não foi possível registrar a reação.';notice.classList.add('show')}
+  };
+  track.addEventListener('click',event=>{const button=event.target.closest('.feed-react');if(button)react(button)});
   const loadPhotos=()=>fetch('./photos.php',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('gallery');return r.json()}).then(list=>{
-    grid.replaceChildren();
-    if(!Array.isArray(list)||!list.length){grid.innerHTML='<p class="empty-gallery">Nenhuma foto disponível.</p>';return;}
-    list.forEach((src,index)=>{const button=document.createElement('button');button.type='button';button.className='photo-thumb';button.setAttribute('aria-label','Ampliar foto '+(index+1));const img=document.createElement('img');img.src=src;img.alt='Foto 406 '+(index+1);img.loading='lazy';button.append(img);grid.append(button)});
-  }).catch(()=>{grid.innerHTML='<p class="empty-gallery">Não foi possível carregar as fotos. Tente abrir Fotos novamente.</p>'});
-  photosIcon.addEventListener('click',()=>{photos.classList.add('open');loadPhotos();});
+    if(!Array.isArray(list)||!list.length){track.innerHTML='<p class="empty-gallery">Nenhuma foto ou vídeo disponível.</p>';return;}
+    posts=shuffle(list);current=Math.floor(Math.random()*posts.length);reacted=new Set();render();schedule();
+  }).catch(()=>{track.innerHTML='<p class="empty-gallery">Não foi possível carregar o feed. Tente abrir Fotos novamente.</p>'});
+  photosIcon.addEventListener('click',()=>{photos.classList.add('open');clearTimeout(timer);loadPhotos();});
 })();
 </script><style>
 /* Correção definitiva dos apps essenciais do dock */
@@ -880,5 +933,26 @@ const buttons=viewer.querySelectorAll('footer button');buttons[0].onclick=()=>ch
 document.addEventListener('click',event=>{const thumb=event.target.closest('.photo-thumb');if(!thumb)return;origin=thumb;const thumbs=[...thumb.parentElement.querySelectorAll('.photo-thumb')];images=thumbs.map(t=>t.querySelector('img').src);index=thumbs.indexOf(thumb);render();viewer.classList.add('open');viewer.querySelector('header button').focus()});
 document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'))return;if(event.key==='Escape')close();if(event.key==='ArrowLeft')change(-1);if(event.key==='ArrowRight')change(1);if(event.key==='Tab'){const focusable=[...viewer.querySelectorAll('button')];const next=(focusable.indexOf(document.activeElement)+(event.shiftKey?-1:1)+focusable.length)%focusable.length;event.preventDefault();focusable[next].focus()}});
 })();
-</script></body>
+</script><style>
+/* Feed social do app Fotos */
+.feed-406-window{background:#0b0b0d!important;color:#fff!important}
+.feed-406-window .app-bar{background:#18181b!important;color:#fff!important}
+.photo-feed{height:calc(100% - 43px);overflow:hidden;background:#080809;position:relative}
+.feed-track{display:flex;height:100%;width:100%;transition:transform .65s cubic-bezier(.2,.8,.2,1);will-change:transform}
+.feed-post{flex:0 0 100%;min-width:100%;height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto auto;gap:0;padding:14px 14px 18px;background:radial-gradient(circle at 50% 0,#25252a,#080809 56%)}
+.feed-media{min-height:0;display:grid;place-items:center;overflow:hidden;border-radius:12px;background:#151519}
+.feed-media img,.feed-media video{width:100%;height:100%;object-fit:contain;display:block}
+.feed-media video{background:#000}
+.feed-meta{display:flex;justify-content:space-between;gap:12px;padding:12px 3px 8px;color:#b9b9c0;font:700 10px/1 Arial,sans-serif;letter-spacing:.12em}
+.feed-kind{color:#ff6849}
+.feed-reactions{display:flex;align-items:center;gap:9px}
+.feed-react{display:inline-flex;align-items:center;gap:7px;min-height:38px;border:1px solid #ffffff2c;border-radius:999px;background:#ffffff12;color:#fff;padding:7px 12px;cursor:pointer;font:700 13px/1 Arial,sans-serif;transition:background .2s,border-color .2s,transform .2s}
+.feed-react:hover{background:#ffffff22;border-color:#ffffff88}
+.feed-react b{font-size:17px;line-height:1}.feed-react[data-reaction="four"] b{display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#ec4738;color:#090909;font:900 13px/1 Arial}
+.feed-react.reacted{animation:feedReaction .55s cubic-bezier(.2,.9,.25,1.4)}@keyframes feedReaction{0%{transform:scale(1)}42%{transform:scale(1.35);background:#ec4738;border-color:#fff}100%{transform:scale(1)}}
+.feed-progress{position:absolute;right:14px;top:14px;border-radius:999px;background:#000a;color:#fff;padding:7px 9px;font:700 10px/1 Arial;letter-spacing:.1em}
+.feed-notice{position:absolute;left:50%;bottom:16px;z-index:3;width:min(90%,420px);margin:0;padding:12px 15px;transform:translate(-50%,130%);opacity:0;transition:.35s;background:#f2ede6;color:#151110;border-radius:9px;text-align:center;font:700 12px/1.45 Arial;box-shadow:0 12px 36px #0008}
+.feed-notice.show{transform:translate(-50%,0);opacity:1}
+@media(max-width:700px){.feed-406-window{left:0!important;top:0!important;width:100vw!important;height:100dvh!important;border-radius:0!important}.feed-post{padding:8px 8px 16px}.feed-meta{padding-top:9px}.feed-react{min-height:42px;padding:8px 13px}.feed-progress{top:8px;right:8px}.feed-notice{bottom:12px;font-size:11px}}
+</style></body>
 </html>
