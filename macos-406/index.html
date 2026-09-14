@@ -1050,3 +1050,20 @@ document.addEventListener('keydown',event=>{if(!viewer.classList.contains('open'
 .feed-406-window .feed-upload button[type="submit"]{background:#1687f8!important;color:#fff!important;box-shadow:0 7px 18px #1687f855!important}
 .feed-406-window .feed-upload button[type="submit"]:hover{background:#0d73dc!important}
 </style>
+
+<style>
+/* Safari/iPhone: impede zoom e deslocamento do feed ao focar o @. */
+@media(max-width:700px){.feed-406-window .feed-upload input[name="handle"]{font-size:16px!important}}
+</style>
+<script>
+(()=>{
+  const form=document.querySelector('.feed-406-window .feed-upload');
+  const feed=document.querySelector('.feed-406-window .photo-feed');
+  const handle=form?.querySelector('input[name="handle"]');
+  if(!form||!feed||!handle)return;
+  let position=0;
+  const restore=()=>{feed.scrollTop=position;try{window.scrollTo(0,0)}catch(_){}};
+  handle.addEventListener('pointerdown',()=>{position=feed.scrollTop},{passive:true});
+  handle.addEventListener('focus',()=>{position=feed.scrollTop;requestAnimationFrame(restore);setTimeout(restore,70);setTimeout(restore,260)});
+})();
+</script>
